@@ -1,0 +1,33 @@
+
+name: Deploy English Learning Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Prepare website
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp -r audio css img js dist/
+
+      - name: Deploy to public repository
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          external_repository: dinhdat551/EngVuiCungDat
+          publish_branch: gh-pages
+          publish_dir: ./dist
