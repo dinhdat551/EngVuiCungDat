@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EngVui – Học tiếng Anh miễn phí</title>
+  <meta name="description" content="EngVui – học tiếng Anh miễn phí kiểu Duolingo từ Lớp 1 đến Lớp 12, luyện thi TOEIC, IELTS. Trang web nhằm mục đích phục vụ học tập miễn phí cho mọi người.">
+  <meta name="theme-color" content="#1CB0F6">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%B2%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <div id="lesson" class="lesson" aria-live="polite"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <noscript><p style="padding:24px;font-family:sans-serif">Vui lòng bật JavaScript để sử dụng EngVui.</p></noscript>
+
+  <!-- Thư viện đọc file audio.zip (âm thanh từ đã được tạo sẵn) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Nội dung giáo trình (mỗi lớp một file, có thể chỉnh sửa) -->
+  <script src="js/config.js"></script>
+  <script src="js/core/registry.js"></script>
+  <script src="js/data/grade1.js"></script>
+  <script src="js/data/grade2.js"></script>
+  <script src="js/data/grade3.js"></script>
+  <script src="js/data/grade4.js"></script>
+  <script src="js/data/grade5.js"></script>
+  <script src="js/data/grade6.js"></script>
+  <script src="js/data/grade7.js"></script>
+  <script src="js/data/grade8.js"></script>
+  <script src="js/data/grade9.js"></script>
+  <script src="js/data/grade10.js"></script>
+  <script src="js/data/grade11.js"></script>
+  <script src="js/data/grade12.js"></script>
+  <script src="js/data/grammar.js"></script>
+  <script src="js/data/exam.js"></script>
+  <script src="js/data/webhocta_exam.js"></script>
+  <script src="js/data/webhocta_grammar.js"></script>
+  <script src="js/data/aviation.js"></script>
+  <script src="js/data/listen_toeic.js"></script>
+  <script src="js/data/listen_ielts.js"></script>
+  <script src="js/data/read_ielts.js"></script>
+  <script src="js/data/pron.js"></script>
+
+  <!-- Ứng dụng -->
+  <script src="js/core/util.js"></script>
+  <script src="js/core/course.js"></script>
+  <script src="js/core/league.js"></script>
+  <script src="js/core/store.js"></script>
+  <script src="js/core/audio.js"></script>
+  <script src="js/core/exercises.js"></script>
+  <script src="js/ui/art.js"></script>
+  <script src="js/ui/components.js"></script>
+  <script src="js/ui/lesson.js"></script>
+  <script src="js/ui/screens.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

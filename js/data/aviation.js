@@ -1,0 +1,636 @@
+/* EngVui – Tiếng Anh hàng không và nghề tiếp viên: 8 chủ đề, mỗi chủ đề có từ vựng, mẫu câu, bài đọc và bài nghe hiểu.
+   Nội dung tự soạn, bám theo tình huống thật của tiếp viên: họp trước chuyến bay, đón khách, trình diễn an toàn,
+   phục vụ ăn uống, thông báo trên chuyến bay, xử lý tình huống, phỏng vấn tuyển dụng, tiếng Anh hàng không ICAO.
+   Định dạng giống js/data/exam.js. Mỗi bài nghe (listening): lines = [người nói, câu, nghĩa]; v là mã giọng trong tools/gen_audio.py. */
+EV.extendExam({
+  names: ['Anna', 'Linh', 'Minh', 'Daniel', 'Maria', 'Tom', 'Emma', 'Hanoi', 'Singapore', 'Tokyo', 'Bangkok', 'Seoul', 'Sydney', 'Smith', 'Lee', 'Kim', 'Nguyen', 'Tran', 'Park', 'Haneda', 'Changi'],
+  groups: [
+    { id: 11, title: 'Hàng không & tiếp viên', desc: 'Tiếng Anh cho tiếp viên và nhân viên hàng không: từ vựng, bài đọc, bài nghe', color: '#0EA5E9', dark: '#0B84BA' },
+  ],
+  topics: [
+    /* ================= 1. Phi hành đoàn ================= */
+    {
+      id: 'av-crew', group: 11, grade: 12, icon: '👩‍✈️', tag: 'Hàng không · Phi hành đoàn',
+      title: 'Phi hành đoàn và công việc tiếp viên', en: 'Cabin crew and duties',
+      desc: 'Các vị trí trên chuyến bay, họp trước chuyến bay và nhiệm vụ hằng ngày.',
+      words: [
+        ['flight attendant', 'tiếp viên hàng không', '👩‍✈️'], ['cabin crew', 'phi hành đoàn cabin', '🧑‍🤝‍🧑'], ['purser', 'tiếp viên trưởng', '🎖️'],
+        ['captain', 'cơ trưởng', '👨‍✈️'], ['first officer', 'cơ phó', '🧑‍✈️'], ['cockpit', 'buồng lái', '🛩️'],
+        ['galley', 'bếp trên máy bay', '🍽️'], ['cabin', 'khoang hành khách', '💺'], ['briefing', 'buổi họp phổ biến trước chuyến bay', '📋'],
+        ['shift', 'ca làm việc', '⏰'], ['uniform', 'đồng phục', '👔'], ['jump seat', 'ghế gập của tiếp viên', '🪑'],
+      ],
+      formula: [['Chịu trách nhiệm', 'be responsible for / be in charge of + danh từ hoặc V-ing'], ['Thói quen công việc', 'S + V(s/es) · always / usually / before every flight']],
+      grammar: [
+        ['Mô tả nhiệm vụ', 'Dùng be responsible for hoặc be in charge of, sau đó là danh từ hoặc V-ing. Đây là cách nói rất hay gặp khi giới thiệu công việc.', 'The purser is in charge of the cabin crew. | Flight attendants are responsible for passenger safety.'],
+        ['Việc làm đều đặn trước chuyến bay', 'Thói quen nghề nghiệp dùng hiện tại đơn, thường kèm before every flight, at the start of each shift.', 'We check the emergency equipment before every flight. | The captain meets the crew one hour before departure.'],
+      ],
+      quiz: [
+        ['The ___ is in charge of the whole cabin crew.', 'purser', ['galley', 'uniform', 'shift'], 'Purser là tiếp viên trưởng, người phụ trách cả đội tiếp viên.'],
+        ['All crew members attend a ___ before the passengers arrive.', 'briefing', ['uniform', 'galley', 'jump seat'], 'Briefing là buổi họp phổ biến thông tin trước chuyến bay.'],
+        ['The pilots sit in the ___ during the flight.', 'cockpit', ['galley', 'cabin', 'briefing'], 'Cockpit là buồng lái của phi công.'],
+        ['Flight attendants prepare meals and drinks in the ___.', 'galley', ['cockpit', 'uniform', 'captain'], 'Galley là khu bếp nhỏ trên máy bay.'],
+        ['Flight attendants are responsible ___ passenger safety.', 'for', ['of', 'to', 'at'], 'Cụm cố định: be responsible for.'],
+        ['The first officer helps the ___ fly the plane.', 'captain', ['purser', 'uniform', 'galley'], 'Cơ phó phụ giúp cơ trưởng điều khiển máy bay.'],
+        ['Our ___ starts at six in the morning and finishes at two.', 'shift', ['galley', 'cockpit', 'cabin'], 'Shift là ca làm việc.'],
+        ['The crew always wears a clean ___ on duty.', 'uniform', ['briefing', 'shift', 'cockpit'], 'Uniform là đồng phục.'],
+      ],
+      sentences: [
+        ['The purser leads the briefing before every flight.', 'Tiếp viên trưởng chủ trì buổi họp trước mỗi chuyến bay.'],
+        ['Flight attendants sit on the jump seats during takeoff and landing.', 'Tiếp viên ngồi ghế gập khi máy bay cất cánh và hạ cánh.'],
+        ['The captain is responsible for the safety of everyone on board.', 'Cơ trưởng chịu trách nhiệm về an toàn của mọi người trên máy bay.'],
+        ['We store the trolleys in the galley.', 'Chúng tôi cất các xe đẩy trong bếp của máy bay.'],
+        ['My shift starts at five o\'clock tomorrow morning.', 'Ca làm của tôi bắt đầu lúc năm giờ sáng mai.'],
+        ['The cabin crew checks the emergency equipment before boarding.', 'Phi hành đoàn cabin kiểm tra thiết bị khẩn cấp trước khi cho khách lên máy bay.'],
+      ],
+      transform: [
+        ['The purser manages the cabin crew.', 'Viết lại với is in charge of', 'The purser is in charge of the cabin crew. | The purser is in charge of managing the cabin crew.', 'Tiếp viên trưởng quản lý đội tiếp viên.'],
+        ['We check the emergency exits before every flight.', 'Chuyển sang câu bị động', 'The emergency exits are checked before every flight. | The emergency exits are checked by us before every flight.', 'Chúng tôi kiểm tra các lối thoát hiểm trước mỗi chuyến bay.'],
+        ['The captain starts the briefing at nine.', 'Chuyển sang câu hỏi', 'Does the captain start the briefing at nine? | When does the captain start the briefing?', 'Cơ trưởng bắt đầu buổi họp lúc chín giờ.'],
+        ['Flight attendants look after passengers.', 'Viết lại với responsible for', 'Flight attendants are responsible for looking after passengers. | Flight attendants are responsible for passengers.', 'Tiếp viên chăm sóc hành khách.'],
+      ],
+      extra: ['is', 'are', 'by', 'does', 'for', 'of'],
+      reading: {
+        title: 'A day in the life of a flight attendant', kind: 'article',
+        text: [
+          'Linh Tran has been a flight attendant for three years. Her working day begins long before the plane takes off. At 5:00 a.m., she arrives at the crew room and checks her roster to see which flight she will work on. Today she is flying from Hanoi to Singapore.',
+          'At 6:00 a.m., the whole crew meets for the pre-flight briefing. The purser, Mr Kim, explains the flight time, the weather and any special passengers, such as a family with a baby. Each crew member then receives a position on the aircraft. Linh will work near the rear door, where she is responsible for the galley.',
+          'Before the passengers board, the crew checks the emergency equipment, tests the intercom and counts the meals. During the flight, Linh serves drinks and meals, answers questions and watches the cabin for any problems. She says the most difficult part of her job is staying calm when passengers are upset.',
+          'After landing, the crew says goodbye to the passengers and reports any problems to the purser. Linh finishes her shift at 4:00 p.m., but she cannot go home yet. She has to complete a short safety report before she leaves.',
+        ],
+        questions: [
+          ['Linh arrives at the crew room at 5:00 a.m.', 'True', ['False', 'Not Given'], 'Trong bài: At 5:00 a.m., she arrives at the crew room.'],
+          ['Mr Kim is the captain of the flight.', 'False', ['True', 'Not Given'], 'Mr Kim là the purser (tiếp viên trưởng), không phải cơ trưởng.'],
+          ['Linh has worked on flights to Tokyo.', 'Not Given', ['True', 'False'], 'Bài không nhắc đến chuyến bay đi Tokyo.'],
+          ['What is Linh responsible for on today\'s flight?', 'The galley near the rear door', ['The cockpit door', 'The emergency exit near the front', 'The pre-flight briefing'], 'Trong bài: she is responsible for the galley (gần cửa sau).'],
+          ['What does Linh say is the hardest part of her job?', 'Staying calm when passengers are upset', ['Waking up early', 'Counting the meals', 'Writing the safety report'], 'Trong bài: the most difficult part ... is staying calm when passengers are upset.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'The pre-flight briefing', kind: 'conversation', exam: 'TOEIC Part 3',
+          speakers: { W: { name: 'Woman (purser)', v: 'F1' }, M: { name: 'Man (crew member)', v: 'M1' } },
+          lines: [
+            ['W', 'Good morning, everyone. Let\'s start the briefing. Today\'s flight to Seoul will take about five hours.', 'Chào buổi sáng mọi người. Chúng ta bắt đầu buổi họp nhé. Chuyến bay hôm nay đi Seoul kéo dài khoảng năm tiếng.'],
+            ['W', 'We have a full flight, and there are two wheelchair passengers in row twelve.', 'Chuyến bay hôm nay kín chỗ, và có hai hành khách ngồi xe lăn ở hàng mười hai.'],
+            ['M', 'Do we know if there are any special meals on board today?', 'Chúng ta có biết hôm nay có suất ăn đặc biệt nào không?'],
+            ['W', 'Yes. Six vegetarian meals and one meal without nuts. Please check the list in the galley.', 'Có. Sáu suất chay và một suất không có hạt. Hãy xem danh sách trong bếp.'],
+            ['M', 'Got it. And will the weather be a problem?', 'Rõ rồi. Thời tiết có gây vấn đề không?'],
+            ['W', 'The captain expects some turbulence over the sea, so we will serve drinks early and then sit down.', 'Cơ trưởng dự báo sẽ có rung lắc trên biển, nên chúng ta sẽ phục vụ đồ uống sớm rồi ngồi xuống.'],
+            ['M', 'Understood. I\'ll go and check the emergency equipment now.', 'Tôi hiểu rồi. Tôi đi kiểm tra thiết bị khẩn cấp ngay đây.'],
+          ],
+          questions: [
+            ['How long will the flight to Seoul take?', 'About five hours', ['About two hours', 'About ten hours', 'About seven hours'], 'Người nói đầu tiên: will take about five hours.'],
+            ['What special meal arrangements are mentioned?', 'Vegetarian meals and a meal without nuts', ['Only children\'s meals', 'Halal meals and fish meals', 'No special meals'], 'Sáu suất chay và một suất không có hạt.'],
+            ['Why will the crew serve drinks early?', 'The captain expects turbulence.', ['The plane will land early.', 'There are too few passengers.', 'The galley will be closed.'], 'Cơ trưởng dự báo rung lắc nên phục vụ sớm rồi ngồi xuống.'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 2. Đón khách và lên máy bay ================= */
+    {
+      id: 'av-boarding', group: 11, grade: 12, icon: '🎫', tag: 'Hàng không · Lên máy bay',
+      title: 'Đón khách và lên máy bay', en: 'Welcoming and boarding passengers',
+      desc: 'Chào khách, hướng dẫn chỗ ngồi, hành lý xách tay và những câu lịch sự khi đón khách.',
+      words: [
+        ['boarding pass', 'thẻ lên máy bay', '🎫'], ['aisle', 'lối đi giữa các hàng ghế', '🚶'], ['window seat', 'ghế cạnh cửa sổ', '🪟'],
+        ['overhead bin', 'ngăn để hành lý phía trên đầu', '🧳'], ['seat belt', 'dây an toàn', '🔒'], ['fasten', 'thắt, cài chặt', '🔗'],
+        ['stow', 'cất, xếp gọn', '📦'], ['carry-on', 'hành lý xách tay', '👜'], ['row', 'hàng ghế', '💺'],
+        ['seat number', 'số ghế', '🔢'], ['tray table', 'bàn ăn gập', '🍽️'], ['welcome aboard', 'chào mừng quý khách lên máy bay', '👋'],
+      ],
+      formula: [['Lịch sự với khách', 'Could / Would you + V...? · May I + V...? · Please + V...']],
+      grammar: [
+        ['Yêu cầu lịch sự', 'Với hành khách, tiếp viên dùng Could you ... hoặc Would you mind ... thay vì câu mệnh lệnh. Thêm please làm lời nói mềm hơn.', 'Could you please take your seat? | Would you mind stowing your bag under the seat?'],
+        ['Chỉ đường đến chỗ ngồi', 'Dùng giới từ: on the left / right, in row 14, next to the window, at the back of the cabin. Hàng ghế dùng in, bên trái hoặc phải dùng on.', 'Your seat is on the right, in row fourteen. | The restroom is at the back of the cabin.'],
+      ],
+      quiz: [
+        ['Welcome ___! May I see your boarding pass, please?', 'aboard', ['abroad', 'across', 'above'], 'Welcome aboard là lời chào khi khách lên máy bay.'],
+        ['Please ___ your seat belt and keep it fastened.', 'fasten', ['stow', 'serve', 'board'], 'Fasten your seat belt: thắt dây an toàn.'],
+        ['You can put your bag in the ___ above your seat.', 'overhead bin', ['galley', 'cockpit', 'aisle'], 'Overhead bin là ngăn để hành lý phía trên ghế.'],
+        ['Could you please ___ your carry-on under the seat in front of you?', 'stow', ['serve', 'announce', 'arrive'], 'Stow là cất, xếp gọn.'],
+        ['Your seat is ___ the left, in row twenty.', 'on', ['in', 'at', 'of'], 'Chỉ bên trái hoặc phải dùng on the left/right.'],
+        ['Excuse me, I think you are in my seat. My seat ___ is 12A.', 'number', ['numbers', 'numbered', 'numbering'], 'My seat number is 12A: số ghế của tôi là 12A.'],
+        ['Would you mind ___ your seat to the upright position for takeoff?', 'returning', ['return', 'to return', 'returns'], 'Would you mind + V-ing.'],
+        ['Please keep the ___ clear so that other passengers can pass.', 'aisle', ['row', 'bin', 'pass'], 'Aisle là lối đi giữa các hàng ghế.'],
+      ],
+      sentences: [
+        ['Good morning, welcome aboard.', 'Chào buổi sáng, chào mừng quý khách lên máy bay.'],
+        ['May I see your boarding pass, please?', 'Cho tôi xem thẻ lên máy bay của quý khách được không?'],
+        ['Your seat is in row twelve, by the window.', 'Ghế của quý khách ở hàng mười hai, cạnh cửa sổ.'],
+        ['Could you please stow your bag in the overhead bin?', 'Quý khách vui lòng cất túi vào ngăn phía trên đầu giúp tôi.'],
+        ['Please take your seat and fasten your seat belt.', 'Xin quý khách ngồi vào ghế và thắt dây an toàn.'],
+        ['The aisle must stay clear during boarding.', 'Lối đi phải được giữ thông thoáng khi khách lên máy bay.'],
+      ],
+      transform: [
+        ['Put your bag under the seat.', 'Viết lại lịch sự với Could you', 'Could you put your bag under the seat? | Could you please put your bag under the seat?', 'Hãy để túi dưới ghế.'],
+        ['You must fasten your seat belt.', 'Viết lại với Please', 'Please fasten your seat belt.', 'Quý khách phải thắt dây an toàn.'],
+        ['Show me your boarding pass.', 'Viết lại với May I', 'May I see your boarding pass? | May I see your boarding pass, please?', 'Cho tôi xem thẻ lên máy bay.'],
+        ['Your seat is next to the window.', 'Viết lại với by', 'Your seat is by the window.', 'Ghế của quý khách cạnh cửa sổ.'],
+      ],
+      extra: ['please', 'would', 'by', 'you', 'to'],
+      reading: {
+        title: 'Boarding information for flight TG 640', kind: 'notice',
+        text: [
+          'BOARDING INFORMATION: Flight TG 640 to Bangkok',
+          'Boarding for flight TG 640 will begin at 8:20 a.m. at Gate 14. Passengers with young children, passengers who need extra help and business class passengers may board first. All other passengers will be called by seat row, starting from the back of the aircraft.',
+          'Each passenger may bring one carry-on bag and one small personal item, such as a handbag or a laptop. Carry-on bags must fit in the overhead bin or under the seat in front. Larger bags must be checked at the counter before 7:50 a.m.',
+          'Please have your boarding pass and passport ready before you reach the gate. The gate will close ten minutes before departure, and passengers who arrive late will not be allowed to board.',
+        ],
+        questions: [
+          ['Business class passengers can board first.', 'True', ['False', 'Not Given'], 'Trong bài: ... business class passengers may board first.'],
+          ['Passengers in the front rows board before passengers in the back rows.', 'False', ['True', 'Not Given'], 'Bài nói gọi khách theo hàng ghế, bắt đầu từ phía sau máy bay.'],
+          ['The flight is full.', 'Not Given', ['True', 'False'], 'Bài không nói chuyến bay có đầy chỗ hay không.'],
+          ['How many carry-on bags may each passenger bring?', 'One', ['Two', 'Three', 'None'], 'Trong bài: one carry-on bag and one small personal item.'],
+          ['When will the gate close?', 'Ten minutes before departure', ['At 8:20 a.m.', 'At 7:50 a.m.', 'When the plane is full'], 'Trong bài: The gate will close ten minutes before departure.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'Helping a passenger find a seat', kind: 'conversation', exam: 'TOEIC Part 3',
+          speakers: { W: { name: 'Woman (flight attendant)', v: 'F1' }, M: { name: 'Man (passenger)', v: 'M2' } },
+          lines: [
+            ['W', 'Good afternoon, sir. Welcome aboard. May I see your boarding pass?', 'Chào ông. Chào mừng ông lên máy bay. Cho tôi xem thẻ lên máy bay của ông được không?'],
+            ['M', 'Sure. Here it is. I\'m looking for seat 22C.', 'Vâng, đây ạ. Tôi đang tìm ghế 22C.'],
+            ['W', 'That\'s on the left side, in row twenty-two. It\'s an aisle seat.', 'Ghế đó ở bên trái, hàng hai mươi hai. Đó là ghế cạnh lối đi.'],
+            ['M', 'Oh, I asked for a window seat when I booked my ticket.', 'Ồ, tôi đã yêu cầu ghế cạnh cửa sổ khi đặt vé.'],
+            ['W', 'Let me check. I\'m afraid the window seats are all taken, but I can put you in 24A if you don\'t mind sitting near the back.', 'Để tôi kiểm tra. Rất tiếc ghế cạnh cửa sổ đã hết, nhưng tôi có thể xếp ông vào ghế 24A nếu ông không ngại ngồi gần phía sau.'],
+            ['M', 'That would be perfect. Thank you. Could I also put my coat in the overhead bin?', 'Vậy thì tuyệt. Cảm ơn cô. Tôi để áo khoác vào ngăn phía trên được không?'],
+            ['W', 'Of course. There is some space above row twenty-four.', 'Tất nhiên. Còn chỗ phía trên hàng hai mươi bốn.'],
+          ],
+          questions: [
+            ['What is the man\'s problem?', 'His seat is not by the window.', ['He lost his boarding pass.', 'He is in the wrong row.', 'His bag is too big.'], 'Ông ấy đã yêu cầu ghế cửa sổ nhưng được ghế 22C cạnh lối đi.'],
+            ['What does the woman offer?', 'A different seat', ['A free meal', 'A blanket', 'A refund'], 'Cô ấy đề nghị ghế 24A.'],
+            ['Where does the man want to put his coat?', 'In the overhead bin', ['Under the seat', 'In the galley', 'In the cockpit'], 'Ông ấy hỏi: put my coat in the overhead bin.'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 3. An toàn bay ================= */
+    {
+      id: 'av-safety', group: 11, grade: 12, icon: '🦺', tag: 'Hàng không · An toàn',
+      title: 'An toàn bay và trình diễn an toàn', en: 'Safety on board',
+      desc: 'Áo phao, mặt nạ dưỡng khí, lối thoát hiểm và các câu thường dùng trong phần hướng dẫn an toàn.',
+      words: [
+        ['life jacket', 'áo phao', '🦺'], ['oxygen mask', 'mặt nạ dưỡng khí', '😷'], ['emergency exit', 'lối thoát hiểm', '🚪'],
+        ['evacuate', 'sơ tán', '🏃'], ['brace position', 'tư thế phòng vệ khi va chạm', '🤸'], ['turbulence', 'sự rung lắc do nhiễu động không khí', '🌪️'],
+        ['cabin pressure', 'áp suất trong khoang', '🎈'], ['fire extinguisher', 'bình chữa cháy', '🧯'], ['slide', 'cầu trượt thoát hiểm', '🛝'],
+        ['safety card', 'thẻ hướng dẫn an toàn', '📄'], ['in the event of', 'trong trường hợp', '⚠️'], ['remain seated', 'giữ nguyên chỗ ngồi', '💺'],
+      ],
+      formula: [['Hướng dẫn an toàn', 'Please + V (nguyên mẫu) · Do not + V · In the event of + danh từ, + mệnh đề']],
+      grammar: [
+        ['In the event of ...', 'Cụm in the event of + danh từ (hoặc in case of) đưa ra tình huống khẩn cấp; sau dấu phẩy là hướng dẫn cần làm.', 'In the event of a loss of cabin pressure, oxygen masks will drop from above. | In case of fire, stay low and follow the crew.'],
+        ['Câu mệnh lệnh với please / do not', 'Hướng dẫn an toàn dùng động từ nguyên mẫu, phủ định dùng do not. Câu ngắn, rõ, lịch sự.', 'Please remain seated with your seat belt fastened. | Do not inflate your life jacket inside the aircraft.'],
+      ],
+      quiz: [
+        ['In the event of an emergency, please ___ the instructions of the crew.', 'follow', ['following', 'followed', 'follows'], 'Câu mệnh lệnh: Please + động từ nguyên mẫu.'],
+        ['Your life jacket is under your seat. ___ pull the red tab inside the aircraft.', 'Do not', ['Not', 'Does not', 'Don\'t not'], 'Phủ định mệnh lệnh: Do not + V.'],
+        ['The seat belt sign is on, so please ___ seated.', 'remain', ['remaining', 'remained', 'remains'], 'Please remain seated: giữ nguyên chỗ ngồi.'],
+        ['The plane shook a little because of ___ over the mountains.', 'turbulence', ['turbine', 'turbulent', 'turbo'], 'Turbulence là sự nhiễu động không khí gây rung lắc.'],
+        ['If the cabin loses ___, oxygen masks will fall automatically.', 'pressure', ['pressing', 'press', 'pressed'], 'Cabin pressure: áp suất khoang.'],
+        ['The nearest ___ may be behind you, so look for the lights on the floor.', 'emergency exit', ['safety card', 'overhead bin', 'tray table'], 'Emergency exit là lối thoát hiểm.'],
+        ['Put on your own ___ first, and then help the child next to you.', 'oxygen mask', ['seat belt', 'tray table', 'life jacket'], 'Khi mất áp suất, tự đeo mặt nạ dưỡng khí trước khi giúp người khác.'],
+        ['Please read the ___ in the seat pocket in front of you.', 'safety card', ['galley', 'boarding pass', 'uniform'], 'Safety card là thẻ hướng dẫn an toàn đặt ở túi ghế.'],
+      ],
+      sentences: [
+        ['Please look at the safety card in your seat pocket.', 'Xin quý khách xem thẻ an toàn trong túi ghế.'],
+        ['Your life jacket is under your seat.', 'Áo phao của quý khách ở dưới ghế.'],
+        ['In the event of a sudden loss of cabin pressure, oxygen masks will drop from above.', 'Trong trường hợp áp suất khoang giảm đột ngột, mặt nạ dưỡng khí sẽ rơi xuống từ phía trên.'],
+        ['Please keep your seat belt fastened while seated.', 'Xin giữ dây an toàn được thắt khi ngồi.'],
+        ['The nearest emergency exit may be behind you.', 'Lối thoát hiểm gần nhất có thể ở phía sau quý khách.'],
+        ['Leave all your belongings and follow the crew.', 'Hãy bỏ lại hành lý và đi theo hướng dẫn của phi hành đoàn.'],
+      ],
+      transform: [
+        ['You must not smoke on board.', 'Viết lại với Do not', 'Do not smoke on board. | Please do not smoke on board.', 'Quý khách không được hút thuốc trên máy bay.'],
+        ['If the cabin loses pressure, masks will drop.', 'Viết lại với In the event of', 'In the event of a loss of cabin pressure, masks will drop. | In the event of cabin pressure loss, masks will drop.', 'Nếu khoang mất áp suất, mặt nạ sẽ rơi xuống.'],
+        ['The crew checks the exits.', 'Chuyển sang câu bị động', 'The exits are checked by the crew.', 'Phi hành đoàn kiểm tra các lối thoát.'],
+        ['Stay in your seat.', 'Viết lại với remain', 'Remain in your seat. | Please remain in your seat. | Please remain seated.', 'Hãy ở yên tại chỗ.'],
+      ],
+      extra: ['is', 'are', 'by', 'not', 'please'],
+      reading: {
+        title: 'Why the safety demonstration matters', kind: 'article',
+        text: [
+          'Many frequent travellers admit that they stop listening during the safety demonstration. They have heard it many times before, and they believe that nothing will happen on their flight. Airlines, however, remind us that the demonstration is short for a reason: the first minutes of an emergency are the most important.',
+          'Research on past accidents shows that passengers who know where the nearest exit is, and who have counted the number of rows to it, can leave the aircraft faster. Some airlines now use short films, music and humour to make the demonstration more interesting, because people remember information better when they enjoy it.',
+          'Flight attendants also play a key role. They are trained to give clear, loud commands in a calm voice, and they practise evacuation procedures every year. The most common advice from crew members is simple: read the safety card, listen to the briefing and count the rows to your nearest exit.',
+        ],
+        questions: [
+          ['Some frequent travellers do not listen to the safety demonstration.', 'True', ['False', 'Not Given'], 'Trong bài: Many frequent travellers admit that they stop listening.'],
+          ['Passengers who count the rows to the exit may leave the plane more quickly.', 'True', ['False', 'Not Given'], 'Trong bài: ... can leave the aircraft faster.'],
+          ['All airlines now use music in their safety films.', 'Not Given', ['True', 'False'], 'Bài chỉ nói some airlines, không nói tất cả.'],
+          ['Why do some airlines use humour in the safety demonstration?', 'People remember information better when they enjoy it.', ['It makes the flight shorter.', 'Passengers must laugh by law.', 'Crew members are tired of the old film.'], 'Trong bài: people remember information better when they enjoy it.'],
+          ['What do flight attendants practise every year?', 'Evacuation procedures', ['Cooking meals', 'Landing the plane', 'Making announcements in other languages'], 'Trong bài: they practise evacuation procedures every year.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'The safety announcement', kind: 'announcement', exam: 'TOEIC Part 4',
+          speakers: { A: { name: 'Announcer (flight attendant)', v: 'F1' } },
+          lines: [
+            ['A', 'Ladies and gentlemen, welcome aboard flight 218 to Singapore. We are about to take off, so please give us your attention for a short safety demonstration.', 'Thưa quý khách, chào mừng quý khách trên chuyến bay 218 đi Singapore. Máy bay sắp cất cánh, xin quý khách chú ý theo dõi phần trình diễn an toàn ngắn.'],
+            ['A', 'There are six emergency exits on this aircraft. Please take a moment to find the exit closest to your seat. It may be behind you.', 'Máy bay có sáu lối thoát hiểm. Xin quý khách dành một chút thời gian tìm lối thoát gần ghế của mình nhất. Có thể nó ở phía sau quý khách.'],
+            ['A', 'In the event of a loss of cabin pressure, oxygen masks will drop from the panel above your seat. Pull the mask towards you, place it over your nose and mouth, and breathe normally.', 'Trong trường hợp mất áp suất khoang, mặt nạ dưỡng khí sẽ rơi xuống từ bảng phía trên ghế. Hãy kéo mặt nạ về phía mình, úp lên mũi và miệng rồi thở bình thường.'],
+            ['A', 'If you are travelling with a child, put on your own mask first, and then help the child. Your life jacket is under your seat. Please do not inflate it inside the aircraft.', 'Nếu quý khách đi cùng trẻ nhỏ, hãy đeo mặt nạ của mình trước rồi giúp trẻ. Áo phao ở dưới ghế. Xin đừng bơm phao khi còn ở trong máy bay.'],
+            ['A', 'Thank you for your attention. Please read the safety card in the seat pocket in front of you, and enjoy your flight.', 'Cảm ơn quý khách đã chú ý. Xin đọc thẻ an toàn trong túi ghế phía trước và chúc quý khách có chuyến bay vui vẻ.'],
+          ],
+          questions: [
+            ['How many emergency exits are there on the aircraft?', 'Six', ['Four', 'Eight', 'Ten'], 'Có sáu lối thoát hiểm (six emergency exits).'],
+            ['What should a passenger do first if travelling with a child?', 'Put on their own mask', ['Inflate the life jacket', 'Help the child first', 'Call a flight attendant'], 'Hãy tự đeo mặt nạ của mình trước, sau đó mới giúp trẻ.'],
+            ['Where is the life jacket?', 'Under the seat', ['In the overhead bin', 'Behind the exit door', 'In the seat pocket'], 'Áo phao ở dưới ghế (under your seat).'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 4. Phục vụ trên chuyến bay ================= */
+    {
+      id: 'av-service', group: 11, grade: 12, icon: '🥤', tag: 'Hàng không · Phục vụ',
+      title: 'Phục vụ ăn uống trên chuyến bay', en: 'In-flight service',
+      desc: 'Hỏi khách muốn dùng gì, suất ăn đặc biệt, dị ứng và những câu phục vụ lịch sự.',
+      words: [
+        ['trolley', 'xe đẩy phục vụ', '🛒'], ['beverage', 'đồ uống', '🥤'], ['refreshments', 'đồ ăn nhẹ và nước uống', '🍪'],
+        ['meal tray', 'khay đồ ăn', '🍱'], ['vegetarian meal', 'suất ăn chay', '🥗'], ['allergy', 'dị ứng', '🤧'],
+        ['blanket', 'chăn', '🛏️'], ['headset', 'tai nghe', '🎧'], ['duty-free', 'hàng miễn thuế', '🛍️'],
+        ['napkin', 'khăn giấy ăn', '🧻'], ['refill', 'rót thêm', '🫗'], ['special meal', 'suất ăn đặc biệt', '🍽️'],
+      ],
+      formula: [['Hỏi khách muốn gì', 'Would you like + danh từ / to + V? · Can I get you + danh từ?'], ['Đồ uống không đếm được', 'some water · a glass of juice · a cup of coffee']],
+      grammar: [
+        ['Would you like ...?', 'Would you like + danh từ để mời khách. Trả lời lịch sự: Yes, please. / No, thank you. Dùng some trong lời mời, không dùng any.', 'Would you like some water? | Would you like chicken or fish?'],
+        ['Từ chỉ lượng với đồ uống', 'Đồ uống không đếm được nên dùng a glass of, a cup of, a bottle of để đếm. Hỏi số lượng: How many ... (đếm được), How much ... (không đếm được).', 'Can I get you a cup of tea? | How much milk would you like?'],
+      ],
+      quiz: [
+        ['Would you like chicken ___ fish for dinner?', 'or', ['and', 'but', 'so'], 'Câu hỏi lựa chọn dùng or.'],
+        ['Can I get you ___ to drink, sir?', 'something', ['nothing', 'everything', 'somewhere'], 'Trong lời mời dùng something: món gì đó để uống.'],
+        ['I\'m allergic ___ nuts. Does this meal contain any?', 'to', ['with', 'of', 'at'], 'Cụm cố định: be allergic to.'],
+        ['Our flight attendants will serve the meals ___ an hour.', 'in', ['at', 'on', 'by'], 'In an hour: một tiếng nữa.'],
+        ['May I have a ___ of water, please?', 'glass', ['piece', 'pair', 'bar'], 'A glass of water: một ly nước.'],
+        ['I ordered a ___ meal when I booked the ticket.', 'vegetarian', ['vegetable', 'vegetables', 'vegetation'], 'Vegetarian meal là suất ăn chay.'],
+        ['It is cold in the cabin. Could I have a ___?', 'blanket', ['trolley', 'napkin', 'headset'], 'Khi lạnh thì xin chăn: blanket.'],
+        ['The flight attendant is pushing the ___ down the aisle.', 'trolley', ['galley', 'slide', 'cockpit'], 'Trolley là xe đẩy phục vụ.'],
+      ],
+      sentences: [
+        ['Would you like something to drink?', 'Quý khách muốn dùng đồ uống gì không ạ?'],
+        ['We have chicken with rice or pasta with vegetables.', 'Chúng tôi có gà với cơm hoặc mì ống với rau.'],
+        ['I\'m afraid we have run out of orange juice.', 'Rất tiếc chúng tôi đã hết nước cam.'],
+        ['Could I have a vegetarian meal, please?', 'Cho tôi một suất ăn chay được không?'],
+        ['Let me bring you another blanket.', 'Để tôi mang cho quý khách thêm một chiếc chăn.'],
+        ['Duty-free items are available for purchase after the meal service.', 'Hàng miễn thuế sẽ được bán sau bữa ăn.'],
+      ],
+      transform: [
+        ['Do you want some coffee?', 'Viết lại lịch sự với Would you like', 'Would you like some coffee?', 'Quý khách muốn dùng cà phê không?'],
+        ['We have no orange juice.', 'Viết lại với run out of', 'We have run out of orange juice. | We\'ve run out of orange juice.', 'Chúng tôi hết nước cam.'],
+        ['I will bring a blanket for you.', 'Viết lại với Let me', 'Let me bring you a blanket. | Let me bring a blanket for you.', 'Tôi sẽ mang chăn cho quý khách.'],
+        ['The crew serves the meal after takeoff.', 'Chuyển sang câu bị động', 'The meal is served after takeoff. | The meal is served by the crew after takeoff.', 'Phi hành đoàn phục vụ bữa ăn sau khi cất cánh.'],
+      ],
+      extra: ['please', 'has', 'is', 'any', 'by'],
+      reading: {
+        title: 'Special meals on board', kind: 'notice',
+        text: [
+          'SPECIAL MEALS ON BOARD – ASIA PACIFIC AIRLINES',
+          'Asia Pacific Airlines offers a wide range of special meals on all international flights, including vegetarian, vegan, low-fat and gluten-free options. Children\'s meals and baby meals are also available.',
+          'To order a special meal, please contact us at least 48 hours before departure by phone or through the "Manage my booking" page on our website. Requests made later cannot be guaranteed, as meals are prepared by our catering partner before the flight.',
+          'If you have a serious food allergy, please also tell a member of the cabin crew when you board. We will check your meal and, where possible, offer you a seat away from other passengers who are eating nuts.',
+          'Special meals are usually served before the regular meals, so you may have to wait a little longer for the trolley to reach your row. Thank you for your understanding.',
+        ],
+        questions: [
+          ['Gluten-free meals are available on international flights.', 'True', ['False', 'Not Given'], 'Trong bài: ... vegetarian, vegan, low-fat and gluten-free options.'],
+          ['Passengers can order a special meal one hour before departure.', 'False', ['True', 'Not Given'], 'Phải đặt ít nhất 48 giờ trước giờ khởi hành.'],
+          ['Special meals cost extra money.', 'Not Given', ['True', 'False'], 'Bài không nói gì về giá của suất ăn đặc biệt.'],
+          ['How can passengers order a special meal?', 'By phone or on the airline\'s website', ['Only at the airport', 'By telling the pilot', 'By asking at the gate'], 'Trong bài: by phone or through the "Manage my booking" page.'],
+          ['What should a passenger with a serious allergy do when boarding?', 'Tell a member of the cabin crew', ['Wait for the trolley', 'Ask the pilot for a new meal', 'Change seats with another passenger'], 'Trong bài: please also tell a member of the cabin crew when you board.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'A meal request', kind: 'conversation', exam: 'TOEIC Part 3',
+          speakers: { W: { name: 'Woman (flight attendant)', v: 'F2' }, M: { name: 'Man (passenger)', v: 'M1' } },
+          lines: [
+            ['W', 'Excuse me, sir. Would you like chicken with rice or fish with potatoes?', 'Xin lỗi ông. Ông muốn dùng gà với cơm hay cá với khoai tây?'],
+            ['M', 'Actually, I ordered a vegetarian meal online. I don\'t eat meat or fish.', 'Thật ra tôi đã đặt suất ăn chay trên mạng. Tôi không ăn thịt hay cá.'],
+            ['W', 'Let me check the list. Ah, yes, Mr Nguyen, seat 31B. Your meal is in the galley. I\'ll bring it in a moment.', 'Để tôi kiểm tra danh sách. À vâng, ông Nguyen, ghế 31B. Suất ăn của ông ở trong bếp. Tôi sẽ mang đến ngay.'],
+            ['M', 'Thank you. Could I also have a glass of orange juice?', 'Cảm ơn cô. Tôi lấy thêm một ly nước cam được không?'],
+            ['W', 'I\'m afraid we have run out of orange juice, but we have apple juice and tomato juice.', 'Rất tiếc chúng tôi đã hết nước cam, nhưng còn nước táo và nước cà chua.'],
+            ['M', 'Apple juice is fine.', 'Nước táo cũng được.'],
+          ],
+          questions: [
+            ['What does the man say about his meal?', 'He ordered it online.', ['He forgot to order one.', 'He wants chicken.', 'He is allergic to rice.'], 'Ông ấy nói: I ordered a vegetarian meal online.'],
+            ['Where is the man\'s meal?', 'In the galley', ['Under his seat', 'On the trolley in front of him', 'In the cockpit'], 'Suất ăn của ông ở trong bếp (your meal is in the galley).'],
+            ['What drink does the man finally choose?', 'Apple juice', ['Orange juice', 'Tomato juice', 'Water'], 'Hết nước cam nên ông chọn nước táo.'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 5. Thông báo trên chuyến bay ================= */
+    {
+      id: 'av-announce', group: 11, grade: 12, icon: '📢', tag: 'Hàng không · Thông báo',
+      title: 'Thông báo trên chuyến bay', en: 'In-flight announcements',
+      desc: 'Thông báo cất cánh, độ cao, rung lắc, hạ cánh và thủ tục nhập cảnh.',
+      words: [
+        ['announcement', 'thông báo', '📢'], ['depart', 'khởi hành', '🛫'], ['land', 'hạ cánh', '🛬'],
+        ['cruising altitude', 'độ cao bay ổn định', '⛅'], ['estimated arrival time', 'giờ đến dự kiến', '🕐'], ['delay', 'sự chậm trễ; làm chậm', '⏳'],
+        ['connecting flight', 'chuyến bay nối chuyến', '🔁'], ['customs', 'hải quan', '🛃'], ['immigration', 'nhập cảnh', '🛂'],
+        ['baggage claim', 'khu nhận hành lý', '🧳'], ['local time', 'giờ địa phương', '🕑'], ['on behalf of', 'thay mặt cho', '🙏'],
+      ],
+      formula: [['Thông báo chủ động', 'We will + V · We are about to + V · We are now + V-ing'], ['Thông báo thụ động', 'The flight has been + V3 · Passengers are requested to + V']],
+      grammar: [
+        ['Tương lai gần trong thông báo', 'Dùng We will ... hoặc We are about to ... để nói về việc sắp xảy ra. Be about to là rất gần, vài phút nữa.', 'We will be landing in twenty minutes. | We are about to begin our descent.'],
+        ['Câu bị động lịch sự', 'Thông báo hay dùng bị động để lịch sự và trang trọng: Passengers are requested to ..., The seat belt sign has been turned on.', 'Passengers are requested to remain seated. | The flight has been delayed by thirty minutes.'],
+      ],
+      quiz: [
+        ['We are ___ to begin our descent into Tokyo.', 'about', ['going', 'likely', 'sure'], 'Be about to + V: sắp làm gì.'],
+        ['The local ___ in Sydney is half past four in the afternoon.', 'time', ['clock', 'hour', 'watch'], 'Local time là giờ địa phương.'],
+        ['Passengers are ___ to remain seated until the seat belt sign is off.', 'requested', ['request', 'requesting', 'requests'], 'Câu bị động: are requested to.'],
+        ['If you are transferring, please follow the signs for ___ flights.', 'connecting', ['connected', 'connection', 'connect'], 'Connecting flight: chuyến nối chuyến.'],
+        ['All passengers must go through ___ after they leave the plane.', 'immigration', ['immigrate', 'immigrant', 'immigrated'], 'Immigration là khâu kiểm tra nhập cảnh.'],
+        ['You can collect your bags at the ___ area in the arrivals hall.', 'baggage claim', ['galley', 'cockpit', 'uniform'], 'Baggage claim là khu nhận hành lý.'],
+        ['Our flight has been ___ by forty minutes because of heavy traffic.', 'delayed', ['delay', 'delaying', 'delays'], 'Has been + quá khứ phân từ: delayed.'],
+        ['On ___ of the captain and crew, I would like to thank you for flying with us.', 'behalf', ['half', 'behind', 'name'], 'On behalf of: thay mặt cho.'],
+      ],
+      sentences: [
+        ['This is your captain speaking. We have reached our cruising altitude.', 'Đây là cơ trưởng. Chúng ta đã đạt độ cao bay ổn định.'],
+        ['We expect to land in Singapore at ten past six, local time.', 'Chúng tôi dự kiến hạ cánh ở Singapore lúc sáu giờ mười, giờ địa phương.'],
+        ['Please remain seated until the seat belt sign has been turned off.', 'Xin quý khách ngồi yên cho đến khi đèn dây an toàn tắt.'],
+        ['The weather in Tokyo is clear, and the temperature is eighteen degrees.', 'Thời tiết ở Tokyo quang đãng, nhiệt độ là mười tám độ.'],
+        ['Passengers with a connecting flight should check the monitors in the terminal.', 'Hành khách nối chuyến xin xem màn hình trong nhà ga.'],
+        ['Thank you for flying with us, and we hope to see you again soon.', 'Cảm ơn quý khách đã bay cùng chúng tôi, hẹn sớm gặp lại.'],
+      ],
+      transform: [
+        ['We will land in twenty minutes.', 'Viết lại với be about to', 'We are about to land. | We are about to land in twenty minutes.', 'Chúng tôi sẽ hạ cánh sau hai mươi phút.'],
+        ['The airline delayed the flight.', 'Chuyển sang câu bị động', 'The flight was delayed by the airline. | The flight has been delayed by the airline.', 'Hãng hàng không đã hoãn chuyến bay.'],
+        ['Please do not leave your seat.', 'Viết lại với requested', 'Passengers are requested not to leave their seats. | You are requested not to leave your seat.', 'Xin đừng rời ghế.'],
+        ['The flight lands at 6 p.m.', 'Viết lại với expected', 'The flight is expected to land at 6 p.m.', 'Chuyến bay hạ cánh lúc 6 giờ chiều.'],
+      ],
+      extra: ['will', 'are', 'has', 'by', 'to'],
+      reading: {
+        title: 'A delayed flight', kind: 'email',
+        text: [
+          'From: Customer Relations, Pacific Wing Airlines',
+          'To: Ms Emma Park',
+          'Subject: Flight PW 482 – Delay and compensation',
+          'Dear Ms Park,',
+          'We are sorry that your flight PW 482 from Sydney to Seoul on 14 May arrived two hours and forty minutes late. The delay was caused by a technical check on the aircraft, which our engineers carried out for your safety.',
+          'Because the delay was longer than two hours, you are entitled to a refreshment voucher worth 25 dollars. No hotel was needed for this flight. If you missed a connecting flight because of the delay, please send us your new ticket and we will pay for the extra cost.',
+          'To claim your voucher, please reply to this email with your booking reference and the name of the passenger. We will send the voucher within five working days.',
+          'Once again, we apologise for any inconvenience and thank you for your patience.',
+          'Daniel Smith, Customer Relations Manager',
+        ],
+        questions: [
+          ['Ms Park\'s flight arrived late.', 'True', ['False', 'Not Given'], 'Trong bài: arrived two hours and forty minutes late.'],
+          ['The delay was caused by bad weather.', 'False', ['True', 'Not Given'], 'Nguyên nhân là kiểm tra kỹ thuật (a technical check), không phải thời tiết.'],
+          ['Ms Park missed a connecting flight.', 'Not Given', ['True', 'False'], 'Bài chỉ nói "nếu" bị lỡ chuyến nối, không nói bà đã lỡ.'],
+          ['What can Ms Park receive because of the delay?', 'A refreshment voucher', ['A free flight', 'A hotel room', 'A new ticket to Tokyo'], 'Trong bài: a refreshment voucher worth 25 dollars.'],
+          ['What must Ms Park send to claim her voucher?', 'Her booking reference and the passenger\'s name', ['Her passport', 'Her boarding pass only', 'A letter from the pilot'], 'Trong bài: reply with your booking reference and the name of the passenger.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'Landing announcement', kind: 'announcement', exam: 'TOEIC Part 4',
+          speakers: { C: { name: 'Captain', v: 'M1' } },
+          lines: [
+            ['C', 'Good evening, ladies and gentlemen. This is your captain speaking. We have begun our descent into Tokyo, and we expect to land in about twenty minutes.', 'Chào quý khách. Đây là cơ trưởng. Chúng ta đã bắt đầu hạ độ cao xuống Tokyo, và dự kiến hạ cánh sau khoảng hai mươi phút.'],
+            ['C', 'The local time is a quarter past seven. The weather is cloudy with light rain, and the temperature is fourteen degrees.', 'Giờ địa phương là bảy giờ mười lăm. Trời nhiều mây, có mưa nhẹ và nhiệt độ là mười bốn độ.'],
+            ['C', 'Please return to your seat, fasten your seat belt and put away your tray table. The cabin crew will collect any rubbish in a few minutes.', 'Xin quý khách trở về chỗ, thắt dây an toàn và gập bàn ăn lại. Phi hành đoàn sẽ thu rác trong vài phút nữa.'],
+            ['C', 'On behalf of the whole crew, I would like to thank you for choosing our airline. We hope to see you again soon.', 'Thay mặt toàn bộ phi hành đoàn, tôi xin cảm ơn quý khách đã chọn hãng của chúng tôi. Hẹn sớm gặp lại quý khách.'],
+          ],
+          questions: [
+            ['What is the purpose of the announcement?', 'To prepare passengers for landing', ['To offer a meal', 'To announce a delay', 'To explain how to use life jackets'], 'Cơ trưởng thông báo đã hạ độ cao và hướng dẫn chuẩn bị hạ cánh.'],
+            ['What is the weather like in Tokyo?', 'Cloudy with light rain', ['Sunny and hot', 'Snowing heavily', 'Foggy'], 'Trời nhiều mây, mưa nhẹ (cloudy with light rain).'],
+            ['What will the cabin crew do in a few minutes?', 'Collect rubbish', ['Serve dinner', 'Sell duty-free items', 'Show a safety film'], 'Phi hành đoàn sẽ thu rác (collect any rubbish).'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 6. Xử lý tình huống với hành khách ================= */
+    {
+      id: 'av-passengers', group: 11, grade: 12, icon: '🤝', tag: 'Hàng không · Hành khách',
+      title: 'Xử lý tình huống với hành khách', en: 'Handling passenger situations',
+      desc: 'Xin lỗi, trấn an, giải quyết phàn nàn và hỗ trợ hành khách khi có sự cố hoặc cần cấp cứu.',
+      words: [
+        ['complaint', 'lời phàn nàn', '😠'], ['apologise', 'xin lỗi', '🙇'], ['compensation', 'tiền bồi thường', '💵'],
+        ['upgrade', 'nâng hạng', '⬆️'], ['reassure', 'trấn an', '🫶'], ['first-aid kit', 'hộp sơ cứu', '🩹'],
+        ['medical emergency', 'cấp cứu y tế', '🚑'], ['calm down', 'bình tĩnh lại', '😌'], ['inconvenience', 'sự bất tiện', '😕'],
+        ['assist', 'hỗ trợ', '🤲'], ['unruly', 'gây rối, khó kiểm soát', '😤'], ['request', 'yêu cầu', '🙋'],
+      ],
+      formula: [['Xin lỗi lịch sự', 'I\'m sorry for / about + danh từ hoặc V-ing · I apologise for + danh từ'], ['Trấn an', 'Please don\'t worry · There is nothing to worry about']],
+      grammar: [
+        ['Xin lỗi và giải thích', 'Dùng I\'m sorry for + danh từ hoặc V-ing, hoặc I apologise for ... Sau đó nêu giải pháp bằng I can ... / Let me ...', 'I apologise for the inconvenience. | I\'m sorry for keeping you waiting.'],
+        ['Từ chối nhẹ nhàng', 'Dùng I\'m afraid ... hoặc Unfortunately ... trước khi nói điều khách không muốn nghe, rồi đưa ra lựa chọn thay thế.', 'I\'m afraid all the seats in business class are taken. | Unfortunately, we cannot change your seat now, but I can offer you a drink.'],
+      ],
+      quiz: [
+        ['I\'m sorry ___ keeping you waiting.', 'for', ['to', 'about of', 'with'], 'I\'m sorry for + V-ing.'],
+        ['We apologise for the ___ caused by the delay.', 'inconvenience', ['convenient', 'inconvenient', 'convenience'], 'Sau mạo từ the cần danh từ: inconvenience.'],
+        ['Please ___ down. There is nothing to worry about.', 'calm', ['cool-down', 'quiet', 'slow'], 'Calm down: bình tĩnh lại.'],
+        ['I\'m ___ that the flight is fully booked, so I cannot upgrade you.', 'afraid', ['afraid of', 'scary', 'fear'], 'I\'m afraid that ...: rất tiếc là ...'],
+        ['A passenger is feeling unwell. Please bring the ___.', 'first-aid kit', ['trolley', 'safety card', 'headset'], 'First-aid kit là hộp sơ cứu.'],
+        ['The passenger asked for ___ because her luggage was damaged.', 'compensation', ['compensating', 'compensate', 'compensated'], 'Danh từ compensation (tiền bồi thường) sau động từ asked for.'],
+        ['The crew will ___ passengers who need help with their bags.', 'assist', ['assistance', 'assistant', 'assisting'], 'Will + động từ nguyên mẫu: assist.'],
+        ['Could you please ___ your voice? Other passengers are sleeping.', 'lower', ['low', 'lowly', 'lowest'], 'Lower your voice: nói nhỏ lại.'],
+      ],
+      sentences: [
+        ['I apologise for the inconvenience.', 'Tôi xin lỗi vì sự bất tiện này.'],
+        ['I\'m afraid all the seats in business class are taken.', 'Rất tiếc tất cả ghế hạng thương gia đã có người.'],
+        ['Please don\'t worry, we will take care of it.', 'Xin đừng lo, chúng tôi sẽ giải quyết việc này.'],
+        ['Is there a doctor on board?', 'Trên máy bay có bác sĩ không ạ?'],
+        ['Let me find out what we can do for you.', 'Để tôi xem chúng tôi có thể làm gì cho quý khách.'],
+        ['Could you please lower your voice? Other passengers are resting.', 'Quý khách vui lòng nói nhỏ lại. Các hành khách khác đang nghỉ ngơi.'],
+      ],
+      transform: [
+        ['Sorry that we kept you waiting.', 'Viết lại với sorry for', 'I\'m sorry for keeping you waiting. | Sorry for keeping you waiting.', 'Xin lỗi đã để quý khách chờ.'],
+        ['We cannot give you an upgrade.', 'Viết lại với I\'m afraid', 'I\'m afraid we cannot give you an upgrade. | I\'m afraid we can\'t give you an upgrade.', 'Chúng tôi không thể nâng hạng cho quý khách.'],
+        ['Stop shouting.', 'Viết lại lịch sự với Could you', 'Could you please stop shouting? | Could you stop shouting, please?', 'Đừng la hét nữa.'],
+        ['We will help you with your bag.', 'Viết lại với assist', 'We will assist you with your bag. | We will assist you with your bags.', 'Chúng tôi sẽ giúp quý khách mang túi.'],
+      ],
+      extra: ['will', 'can', 'could', 'sorry', 'for'],
+      reading: {
+        title: 'A medical emergency in the air', kind: 'article',
+        text: [
+          'Last month, on a long flight from Frankfurt to Hanoi, a passenger suddenly felt dizzy and fell ill. One of the flight attendants, Maria, noticed the problem at once. She asked the passenger some quick questions, made him comfortable and called the purser.',
+          'The purser made an announcement asking whether there was a doctor or a nurse on board. Two passengers, a doctor and a nurse, volunteered to help. Maria brought the first-aid kit and the oxygen bottle, while the purser contacted a medical service on the ground by radio.',
+          'After an hour, the passenger felt much better. The captain decided to continue the flight to Hanoi, because the passenger was stable and an ambulance was ready at the airport. Airlines say that medical emergencies are rare, but all cabin crew receive first-aid training every year so that they can respond quickly.',
+        ],
+        questions: [
+          ['The passenger felt dizzy during the flight.', 'True', ['False', 'Not Given'], 'Trong bài: a passenger suddenly felt dizzy and fell ill.'],
+          ['The plane landed at the nearest airport.', 'False', ['True', 'Not Given'], 'Cơ trưởng quyết định tiếp tục bay đến Hanoi.'],
+          ['The passenger was a man who travelled alone.', 'Not Given', ['True', 'False'], 'Bài chỉ nói "him", không nói ông ấy đi một mình hay không.'],
+          ['What did the purser ask in the announcement?', 'Whether there was a doctor or nurse on board', ['Whether anyone had a first-aid kit', 'Whether the plane could land early', 'Whether passengers wanted a meal'], 'Trong bài: asking whether there was a doctor or a nurse on board.'],
+          ['Why did the captain decide to continue to Hanoi?', 'The passenger was stable and an ambulance was ready.', ['The airport in Frankfurt was closed.', 'The doctor was tired.', 'The plane did not have enough fuel.'], 'Trong bài: the passenger was stable and an ambulance was ready.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'Handling a complaint', kind: 'conversation', exam: 'TOEIC Part 3',
+          speakers: { W: { name: 'Woman (passenger)', v: 'F3' }, M: { name: 'Man (flight attendant)', v: 'M2' } },
+          lines: [
+            ['W', 'Excuse me. I have a problem. The passenger in front of me has put his seat all the way back, and I can\'t use my laptop.', 'Xin lỗi. Tôi gặp một vấn đề. Người ngồi phía trước đã ngả ghế hết cỡ và tôi không thể dùng máy tính xách tay.'],
+            ['M', 'I\'m sorry about that, madam. Let me see what I can do. Are there any empty seats near you?', 'Tôi xin lỗi về chuyện đó, thưa bà. Để tôi xem có thể làm gì. Gần đây có ghế trống nào không?'],
+            ['W', 'I think there are some free seats in row thirty-five, near the window.', 'Tôi nghĩ có vài ghế trống ở hàng ba mươi lăm, gần cửa sổ.'],
+            ['M', 'That\'s right. I can move you there, and I\'ll also bring you a free drink to apologise for the inconvenience.', 'Đúng vậy. Tôi có thể chuyển bà sang đó, và tôi cũng sẽ mang đến một thức uống miễn phí để xin lỗi vì sự bất tiện này.'],
+            ['W', 'That would be very kind. Could you help me with my bag as well?', 'Vậy thì tốt quá. Anh giúp tôi xách túi luôn được không?'],
+            ['M', 'Of course. Please follow me.', 'Dĩ nhiên rồi. Xin bà đi theo tôi.'],
+          ],
+          questions: [
+            ['What is the woman\'s complaint?', 'She cannot use her laptop.', ['Her meal was cold.', 'Her seat belt is broken.', 'The cabin is too noisy.'], 'Người ngồi trước ngả ghế nên bà không dùng được laptop.'],
+            ['How will the flight attendant solve the problem?', 'He will move her to another seat.', ['He will ask the other passenger to leave.', 'He will upgrade her to business class.', 'He will give her a refund.'], 'Ông ấy đề nghị chuyển bà sang ghế trống ở hàng 35.'],
+            ['What does the woman ask the man to do?', 'Help her with her bag', ['Call the captain', 'Bring a blanket', 'Turn off the lights'], 'Bà hỏi: Could you help me with my bag as well?'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 7. Phỏng vấn tiếp viên ================= */
+    {
+      id: 'av-interview', group: 11, grade: 12, icon: '🎤', tag: 'Hàng không · Phỏng vấn',
+      title: 'Phỏng vấn tuyển tiếp viên hàng không', en: 'Cabin crew interview',
+      desc: 'Từ vựng và mẫu câu để trả lời phỏng vấn: động lực, điểm mạnh, làm việc nhóm và dịch vụ khách hàng.',
+      words: [
+        ['applicant', 'ứng viên', '🙋'], ['interview', 'phỏng vấn', '🎤'], ['assessment day', 'ngày đánh giá tuyển dụng', '📝'],
+        ['customer service', 'dịch vụ khách hàng', '🤝'], ['teamwork', 'làm việc nhóm', '👥'], ['grooming', 'diện mạo, chăm chút ngoại hình', '💇'],
+        ['strength', 'điểm mạnh', '💪'], ['work under pressure', 'làm việc dưới áp lực', '⚡'], ['fluent', 'trôi chảy', '🗣️'],
+        ['flexible', 'linh hoạt', '🤸'], ['reference', 'thư giới thiệu, người giới thiệu', '📄'], ['motivation', 'động lực', '🔥'],
+      ],
+      formula: [['Trả lời phỏng vấn', 'I am good at + V-ing / danh từ · I have experience in + V-ing · I would like to + V']],
+      grammar: [
+        ['Nói về điểm mạnh', 'Dùng I am good at + V-ing, I am + tính từ, hoặc I have + danh từ. Nêu ví dụ cụ thể để thuyết phục.', 'I am good at working in a team. | I have three years\' experience in customer service.'],
+        ['Nói về động lực', 'Why do you want to be a flight attendant? Trả lời bằng I would like to ... because ... hoặc I am interested in ... Hãy gắn với dịch vụ, văn hóa và làm việc nhóm.', 'I would like to travel and help people at the same time. | I am interested in working with passengers from different cultures.'],
+      ],
+      quiz: [
+        ['I am good ___ solving problems quickly.', 'at', ['in', 'for', 'about'], 'Be good at + V-ing.'],
+        ['Why do you want to ___ a flight attendant?', 'become', ['becoming', 'became', 'becomes'], 'Want to + động từ nguyên mẫu.'],
+        ['Cabin crew need to be ___ because their schedules often change.', 'flexible', ['flexibly', 'flexibility', 'flex'], 'Sau be cần tính từ: flexible.'],
+        ['I have two years\' experience ___ customer service.', 'in', ['at', 'on', 'about'], 'Experience in + danh từ.'],
+        ['Good ___ is important because crew work together in a small space.', 'teamwork', ['teamworks', 'teamworker', 'teamworking'], 'Teamwork không đếm được.'],
+        ['My ___ for this job is my love of travel and people.', 'motivation', ['motivate', 'motivated', 'motivating'], 'Danh từ motivation sau my.'],
+        ['The airline will invite about fifty ___ to the assessment day.', 'applicants', ['applicant', 'applying', 'applies'], 'Fifty + danh từ số nhiều: applicants.'],
+        ['I speak English and Korean ___.', 'fluently', ['fluent', 'fluency', 'fluence'], 'Cần trạng từ bổ nghĩa cho speak: fluently.'],
+      ],
+      sentences: [
+        ['I would like to become a flight attendant because I enjoy helping people.', 'Tôi muốn trở thành tiếp viên hàng không vì tôi thích giúp đỡ mọi người.'],
+        ['I am good at working in a team.', 'Tôi làm việc nhóm tốt.'],
+        ['In my last job, I dealt with difficult customers every day.', 'Ở công việc trước, ngày nào tôi cũng xử lý những khách hàng khó tính.'],
+        ['I can stay calm under pressure.', 'Tôi có thể giữ bình tĩnh khi bị áp lực.'],
+        ['I speak English fluently and I am learning Japanese.', 'Tôi nói tiếng Anh trôi chảy và đang học tiếng Nhật.'],
+        ['I am happy to work shifts, weekends and holidays.', 'Tôi sẵn sàng làm theo ca, cuối tuần và ngày lễ.'],
+      ],
+      transform: [
+        ['I want to work as a flight attendant.', 'Viết lại với would like', 'I would like to work as a flight attendant.', 'Tôi muốn làm tiếp viên hàng không.'],
+        ['I work well in a team.', 'Viết lại với good at', 'I am good at working in a team.', 'Tôi làm việc nhóm tốt.'],
+        ['I have worked in customer service for two years.', 'Viết lại với experience', 'I have two years\' experience in customer service. | I have two years of experience in customer service.', 'Tôi làm dịch vụ khách hàng được hai năm.'],
+        ['Is she fluent in English?', 'Viết lại với speak', 'Does she speak English fluently?', 'Cô ấy có trôi chảy tiếng Anh không?'],
+      ],
+      extra: ['am', 'at', 'in', 'does', 'would'],
+      reading: {
+        title: 'Cabin crew recruitment: what to expect', kind: 'article',
+        text: [
+          'Becoming a flight attendant is a popular career choice, and most airlines receive thousands of applications every year. The recruitment process usually has three stages. First, you submit your application form and a photograph online. Second, successful applicants are invited to an assessment day, where they take part in group activities, a short English test and an interview. Finally, a small number of candidates are asked to complete a medical check and safety training before they can start work.',
+          'During the assessment day, recruiters watch how candidates work in a team rather than how loudly they speak. They also look for friendly, polite behaviour and the ability to stay calm when a situation changes unexpectedly. Candidates are often asked situational questions, such as "What would you do if a passenger refused to follow the safety rules?"',
+          'Airlines also have practical requirements. Most ask applicants to be at least 18 or 21 years old, to be able to swim, and to have the right to work in the country. Many also require a minimum arm reach so that crew can use the overhead bins and emergency equipment. Candidates who prepare answers about customer service, teamwork and flexibility usually perform best.',
+        ],
+        questions: [
+          ['The recruitment process has three stages.', 'True', ['False', 'Not Given'], 'Trong bài: The recruitment process usually has three stages.'],
+          ['Recruiters prefer candidates who speak the loudest in group activities.', 'False', ['True', 'Not Given'], 'Bài nói nhà tuyển dụng nhìn cách làm việc nhóm, không phải ai nói to nhất.'],
+          ['All airlines require candidates to speak three languages.', 'Not Given', ['True', 'False'], 'Bài không nhắc đến yêu cầu ba ngôn ngữ.'],
+          ['What is the second stage of recruitment?', 'An assessment day', ['A medical check', 'Safety training', 'Submitting a photograph'], 'Giai đoạn hai: assessment day.'],
+          ['Why do airlines ask about a minimum arm reach?', 'Crew need to use the overhead bins and emergency equipment.', ['Crew must lift heavy suitcases.', 'Uniforms come in one size.', 'It is a rule in every country.'], 'Trong bài: so that crew can use the overhead bins and emergency equipment.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'A cabin crew interview', kind: 'conversation', exam: 'TOEIC Part 3',
+          speakers: { W: { name: 'Woman (recruiter)', v: 'F1' }, M: { name: 'Man (applicant)', v: 'M2' } },
+          lines: [
+            ['W', 'Thank you for coming today. Could you tell me why you want to become a flight attendant?', 'Cảm ơn anh đã đến hôm nay. Anh cho tôi biết vì sao anh muốn trở thành tiếp viên hàng không?'],
+            ['M', 'I have always enjoyed meeting new people, and I\'m interested in different cultures. I also like helping people, so this job seems perfect for me.', 'Tôi luôn thích gặp gỡ người mới và quan tâm đến các nền văn hóa khác nhau. Tôi cũng thích giúp đỡ mọi người nên công việc này có vẻ rất phù hợp với tôi.'],
+            ['W', 'I see. Have you worked in customer service before?', 'Tôi hiểu. Anh đã từng làm dịch vụ khách hàng chưa?'],
+            ['M', 'Yes, for three years. I worked in a busy hotel in Da Nang. I often dealt with guests who were tired or upset.', 'Rồi, trong ba năm. Tôi làm ở một khách sạn đông khách tại Đà Nẵng. Tôi thường xử lý những vị khách mệt mỏi hoặc khó chịu.'],
+            ['W', 'And what is your greatest strength?', 'Điểm mạnh nhất của anh là gì?'],
+            ['M', 'I\'m good at staying calm under pressure, and I enjoy working in a team.', 'Tôi giỏi giữ bình tĩnh khi bị áp lực và tôi thích làm việc nhóm.'],
+            ['W', 'Great. We will contact you by email within two weeks.', 'Tốt lắm. Chúng tôi sẽ liên hệ với anh qua email trong vòng hai tuần.'],
+          ],
+          questions: [
+            ['Why does the man want to be a flight attendant?', 'He enjoys meeting people and helping them.', ['He wants to earn a lot of money.', 'He is afraid of working in an office.', 'His friend works for the airline.'], 'Anh ấy thích gặp gỡ và giúp đỡ mọi người.'],
+            ['Where did the man work before?', 'In a hotel', ['In a restaurant', 'In a bank', 'In a school'], 'Anh ấy làm ở một khách sạn tại Đà Nẵng.'],
+            ['What will the recruiter do next?', 'Contact him by email', ['Offer him a job now', 'Ask him to take a medical test today', 'Send him a uniform'], 'Chúng tôi sẽ liên hệ qua email trong vòng hai tuần.'],
+          ],
+        },
+      ],
+    },
+
+    /* ================= 8. Tiếng Anh hàng không ================= */
+    {
+      id: 'av-english', group: 11, grade: 12, icon: '🗼', tag: 'Hàng không · ICAO',
+      title: 'Tiếng Anh hàng không: bảng chữ cái và thuật ngữ', en: 'Aviation English basics',
+      desc: 'Bảng chữ cái ngữ âm ICAO, cách đọc số và thuật ngữ liên lạc giữa phi công và kiểm soát không lưu.',
+      words: [
+        ['runway', 'đường băng', '🛣️'], ['taxiway', 'đường lăn', '🛤️'], ['control tower', 'đài kiểm soát không lưu', '🗼'],
+        ['call sign', 'tên gọi liên lạc của chuyến bay', '📡'], ['clearance', 'sự cho phép của kiểm soát không lưu', '✅'], ['altitude', 'độ cao', '📏'],
+        ['heading', 'hướng bay', '🧭'], ['go around', 'bay vòng lại, hủy hạ cánh', '🔄'], ['roger', 'đã nhận, đã hiểu', '👌'],
+        ['mayday', 'tín hiệu cấp cứu khẩn', '🆘'], ['standby', 'xin chờ', '⏸️'], ['cleared for takeoff', 'được phép cất cánh', '🛫'],
+      ],
+      formula: [['Cách đọc số trong hàng không', '0 zero · 3 tree · 5 fife · 9 niner · 1000 one thousand'], ['Bảng chữ cái ICAO', 'A Alpha · B Bravo · C Charlie · D Delta · E Echo …']],
+      grammar: [
+        ['Bảng chữ cái ngữ âm (ICAO)', 'Để tránh nhầm chữ qua radio, mỗi chữ cái có một từ riêng: Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel, India, Juliet, Kilo, Lima, Mike, November, Oscar, Papa, Quebec, Romeo, Sierra, Tango, Uniform, Victor, Whiskey, X-ray, Yankee, Zulu.', 'Alpha | Bravo | Charlie | Delta | Echo'],
+        ['Cách đọc số', 'Trong liên lạc hàng không, một số số được đọc đặc biệt để dễ nghe: 3 là tree, 5 là fife, 9 là niner. Số 1000 đọc là one thousand.', 'Runway two seven | Heading three six zero'],
+      ],
+      quiz: [
+        ['Control tower: "Flight VN one two three, you are ___ for takeoff."', 'cleared', ['clear', 'clearing', 'clearance'], 'Be cleared for takeoff: được phép cất cánh.'],
+        ['The pilot said "___" to confirm that he understood the message.', 'Roger', ['Mayday', 'Standby', 'Delta'], 'Roger nghĩa là đã nhận và hiểu thông tin.'],
+        ['In the phonetic alphabet, the letter B is ___.', 'Bravo', ['Beta', 'Bobby', 'Baker'], 'B là Bravo trong bảng chữ cái ICAO.'],
+        ['"Mayday, mayday, mayday" is used when a plane is in ___ danger.', 'serious', ['seriously', 'seriousness', 'series'], 'Cần tính từ trước danh từ danger: serious.'],
+        ['The plane is moving slowly along the ___ towards the runway.', 'taxiway', ['galley', 'cockpit', 'aisle'], 'Taxiway là đường lăn nối đường băng.'],
+        ['The aircraft is descending to an ___ of three thousand feet.', 'altitude', ['attitude', 'altered', 'altar'], 'Altitude là độ cao. Attitude (thái độ) dễ nhầm.'],
+        ['The pilot decided to ___ because another plane was still on the runway.', 'go around', ['go off', 'go up', 'go back'], 'Go around: bay vòng lại, hủy lần hạ cánh.'],
+        ['The pilot answers "___" to show that he will comply with the instruction.', 'Wilco', ['Mayday', 'Standby', 'Tango'], 'Wilco = will comply: sẽ làm theo.'],
+      ],
+      sentences: [
+        ['Tower, this is flight Vietnam one two three, ready for takeoff.', 'Đài kiểm soát, đây là chuyến bay Vietnam một hai ba, sẵn sàng cất cánh.'],
+        ['Cleared to land, runway two seven.', 'Được phép hạ cánh, đường băng hai bảy.'],
+        ['Turn left heading three six zero.', 'Rẽ trái, hướng bay ba sáu không.'],
+        ['Climb and maintain flight level three five zero.', 'Lên cao và duy trì mực bay ba năm không.'],
+        ['Say again, please. I did not copy your last message.', 'Xin nhắc lại. Tôi không nghe rõ thông điệp cuối của bạn.'],
+        ['Go around, go around. Obstacle on the runway.', 'Bay vòng lại, bay vòng lại. Có vật cản trên đường băng.'],
+      ],
+      transform: [
+        ['You can take off now.', 'Viết lại với cleared', 'You are cleared for takeoff. | You are cleared to take off.', 'Bạn được phép cất cánh ngay.'],
+        ['Please repeat the message.', 'Viết lại với say again', 'Say again, please. | Please say again.', 'Xin lặp lại thông điệp.'],
+        ['The flight number is two seven five.', 'Viết lại với call sign (số chuyến bay)', 'The call sign is two seven five.', 'Số chuyến bay là hai bảy năm.'],
+        ['The plane will go back up.', 'Viết lại với go around', 'The plane will go around.', 'Máy bay sẽ bay lên và vòng lại.'],
+      ],
+      extra: ['is', 'are', 'will', 'cleared', 'please'],
+      reading: {
+        title: 'Why aviation English is different', kind: 'article',
+        text: [
+          'English is the international language of aviation. Pilots and air traffic controllers from different countries use it every day, even when it is not their first language. However, aviation English is different from everyday English. It uses short, clear phrases, a strict word order and special words such as "roger", "wilco" and "mayday".',
+          'The International Civil Aviation Organization, known as ICAO, has created rules for this language. For example, numbers are read one digit at a time, and some numbers have a special pronunciation, such as "tree" for 3 and "niner" for 9. This is because radio signals can be weak, and small mistakes in numbers can be dangerous.',
+          'Pilots and controllers also use the ICAO phonetic alphabet, in which every letter has its own word, for example "Alpha" for A and "Bravo" for B. ICAO tests pilots\' English regularly. Pilots must reach at least level four on its six-level scale, and those who stay at level four are tested again every three years.',
+        ],
+        questions: [
+          ['English is used by pilots and controllers from different countries.', 'True', ['False', 'Not Given'], 'Trong bài: Pilots and air traffic controllers from different countries use it every day.'],
+          ['Aviation English is the same as everyday English.', 'False', ['True', 'Not Given'], 'Bài nói aviation English is different from everyday English.'],
+          ['Pilots at level four take the English test again every year.', 'False', ['True', 'Not Given'], 'Trong bài: những phi công ở mức bốn được kiểm tra lại mỗi ba năm (every three years), không phải mỗi năm.'],
+          ['Why are numbers read one digit at a time?', 'Radio signals can be weak and mistakes can be dangerous.', ['Controllers speak very slowly.', 'Numbers are too long.', 'ICAO wants to save time.'], 'Trong bài: radio signals can be weak, and small mistakes in numbers can be dangerous.'],
+          ['What does ICAO stand for in the text?', 'The International Civil Aviation Organization', ['The International Cabin Air Office', 'The Internal Control of Airplane Operations', 'The Indian Council of Airlines'], 'Trong bài: The International Civil Aviation Organization, known as ICAO.'],
+        ],
+      },
+      listening: [
+        {
+          title: 'Pilot and control tower', kind: 'conversation', exam: 'Aviation English',
+          speakers: { P: { name: 'Pilot', v: 'M2' }, T: { name: 'Tower', v: 'F2' } },
+          lines: [
+            ['P', 'Tower, Vietnam two seven five, ready for departure, runway two five.', 'Đài kiểm soát, Vietnam hai bảy năm, sẵn sàng khởi hành, đường băng hai năm.'],
+            ['T', 'Vietnam two seven five, hold position. Traffic landing on runway two five.', 'Vietnam hai bảy năm, giữ nguyên vị trí. Có máy bay đang hạ cánh xuống đường băng hai năm.'],
+            ['P', 'Hold position, Vietnam two seven five.', 'Giữ nguyên vị trí, Vietnam hai bảy năm.'],
+            ['T', 'Vietnam two seven five, wind two six zero degrees at ten knots. Runway two five, cleared for takeoff.', 'Vietnam hai bảy năm, gió hướng hai sáu không độ, mười hải lý một giờ. Đường băng hai năm, được phép cất cánh.'],
+            ['P', 'Cleared for takeoff, runway two five, Vietnam two seven five.', 'Được phép cất cánh, đường băng hai năm, Vietnam hai bảy năm.'],
+          ],
+          questions: [
+            ['Which runway is the plane using?', 'Runway 25', ['Runway 27', 'Runway 52', 'Runway 5'], 'Đường băng hai năm (runway two five).'],
+            ['Why does the tower tell the pilot to hold position?', 'Another aircraft is landing.', ['The runway is closed.', 'The pilot forgot his call sign.', 'The wind is too strong.'], 'Tower nói: Traffic landing on runway two five.'],
+            ['What is the pilot\'s call sign?', 'Vietnam 275', ['Vietnam 725', 'Vietnam 257', 'Vietnam 527'], 'Hai bảy năm (two seven five) = 275.'],
+          ],
+        },
+      ],
+    },
+  ],
+});
