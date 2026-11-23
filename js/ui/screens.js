@@ -20,7 +20,7 @@
     { id: 'shop', label: 'Cửa hàng', icon: '🛍️', noBottom: true },
     { id: 'profile', label: 'Hồ sơ', icon: '' },
     { id: 'settings', label: 'Cài đặt', icon: '⚙️', noBottom: true },
-  ].filter((n) => EV.config.economy || n.id !== 'shop');
+  ].filter((n) => (EV.config.economy || n.id !== 'shop') && (EV.config.league || n.id !== 'leaderboard') && (EV.config.quests || n.id !== 'quests'));
   const AVATARS = ['🐲', '🦊', '🐼', '🐯', '🐸', '🐵', '🦁', '🐨', '🐰', '🐧', '🐙', '🦄', '🐱', '🐶', '🐻', '🐹', '🦉', '🐢'];
   const COLORS = ['#1CB0F6', '#58CC02', '#FF9600', '#CE82FF', '#FF4B4B', '#00CD9C', '#FF86D0', '#2B70C9', '#FFC800'];
   const WEEKDAYS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
@@ -109,10 +109,10 @@
     const out = [statsBar()];
     if (route !== 'quests') {
       out.push(`<div class="card"><div class="card-head"><h3>Mục tiêu hằng ngày</h3><a href="#/settings" class="link">Sửa</a></div>${goalBlock()}</div>`);
-      out.push(`<div class="card"><div class="card-head"><h3>Nhiệm vụ hằng ngày</h3><a href="#/quests" class="link">Xem tất cả</a></div>
+      if (EV.config.quests) out.push(`<div class="card"><div class="card-head"><h3>Nhiệm vụ hằng ngày</h3><a href="#/quests" class="link">Xem tất cả</a></div>
         ${S().quests().map((q) => questRow(q, true)).join('')}</div>`);
     }
-    if (route !== 'leaderboard') {
+    if (route !== 'leaderboard' && EV.config.league) {
       const T = EV.league.TIERS[s.league.tier];
       const rows = EV.league.standings(s.league.week, s.league.tier, s.league.xp, s.profile.name, s.profile.avatar);
       const rank = rows.findIndex((r) => r.me) + 1;
@@ -673,6 +673,7 @@
     return esc((parts[parts.length - 1] || '?').charAt(0).toUpperCase());
   };
   function renderLeaderboard(main) {
+    if (!EV.config.league) { location.hash = '#/learn'; return; }   // bảng xếp hạng đang tạm ẩn
     const s = st();
     const L = EV.league;
     const tier = s.league.tier;
@@ -708,6 +709,7 @@
      NHIỆM VỤ
      ========================================================= */
   function renderQuests(main) {
+    if (!EV.config.quests) { location.hash = '#/learn'; return; }   // nhiệm vụ đang tạm ẩn
     const now = new Date();
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     main.innerHTML = `
@@ -790,7 +792,7 @@
   }
   function achievementsHTML() {
     const lv = S().achievementLevels();
-    return `<div class="ach-list">${S().ACHIEVEMENTS.map((a) => {
+    return `<div class="ach-list">${S().ACHIEVEMENTS.filter((a) => (EV.config.league || a.id !== 'league') && (EV.config.economy || a.id !== 'chests')).map((a) => {
       const level = lv[a.id];
       const maxed = level >= a.tiers.length;
       const target = a.tiers[Math.min(level, a.tiers.length - 1)];
@@ -823,7 +825,7 @@
       <div class="stat-grid">
         ${statBox('🔥', s.streak.count, `Ngày streak (dài nhất ${s.streak.longest})`)}
         ${statBox('⚡', U.fmtNum(s.xp), 'Tổng KN')}
-        ${statBox('🏅', T.name, 'Giải hiện tại')}
+        ${EV.config.league ? statBox('🏅', T.name, 'Giải hiện tại') : ''}
         ${statBox('📘', s.stats.lessons, 'Bài học đã hoàn thành')}
         ${statBox('📖', Object.keys(s.learned).length, 'Từ vựng đã học')}
         ${statBox('⏱️', U.fmtDuration(s.stats.ms), 'Thời gian học')}

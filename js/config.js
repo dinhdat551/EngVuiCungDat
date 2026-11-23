@@ -10,6 +10,8 @@ EV.config = Object.assign({
   appTitle: 'EngVui – Học tiếng Anh miễn phí',
   welcome: 'Bài học ngắn như trò chơi, học tiếng Anh từ Lớp 1 đến Lớp 12, luyện thi TOEIC và IELTS.',
   economy: false,   // false: tạm ẩn tim, đá quý, rương báu và cửa hàng (học không bị trừ tim); đặt true để bật lại
+  league: false,    // false: tạm ẩn bảng xếp hạng/giải đấu; đặt true để bật lại
+  quests: false,    // false: tạm ẩn Nhiệm vụ hằng ngày; đặt true để bật lại
   mission: 'Trang web nhằm mục đích phục vụ học tập miễn phí cho mọi người',
   contact: '',   // điền email liên hệ để chủ sở hữu bản quyền báo gỡ nội dung (nếu có)
   donate: { name: 'DINH TUAN DAT', bank: 'TPBank', number: '42037234682', shown: '4203 7234 682', qr: 'img/donate-qr.jpg' },

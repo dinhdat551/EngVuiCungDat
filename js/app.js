@@ -73,7 +73,7 @@
       if (n.type === 'freeze') queue.push({ mascot: 'happy', title: '🧊 Băng giữ streak đã bảo vệ bạn!', text: `Bạn đã lỡ ${n.n} ngày nhưng chuỗi streak vẫn được giữ nguyên.` });
     });
     const r = st().league.result;
-    if (r && !r.seen) {
+    if (r && !r.seen && EV.config.league) {
       const T = EV.league.TIERS;
       if (r.change === 'up') queue.push({ mascot: 'cheer', title: `Thăng hạng lên Giải ${T[r.to].name}!`, text: `Tuần trước bạn đứng hạng #${r.rank}. Quá tuyệt vời!`, confetti: true });
       else if (r.change === 'down') queue.push({ mascot: 'sad', title: `Bạn đã xuống Giải ${T[r.to].name}`, text: `Tuần trước bạn đứng hạng #${r.rank}. Tuần này cố gắng hơn nhé!` });
