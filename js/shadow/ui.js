@@ -35,6 +35,27 @@
     return new Blob([buf], { type: 'audio/wav' });
   }
 
+  // Các điểm cắt (mẫu) chia tín hiệu thành phần ~chunkSec giây, mỗi điểm đặt ở chỗ yên lặng nhất trong ±searchSec
+  function splitAtQuiet(x, sr, chunkSec, searchSec) {
+    const cuts = [0];
+    const f = Math.floor(0.1 * sr);
+    let pos = 0;
+    while (x.length - pos > (chunkSec + searchSec) * sr) {
+      const target = pos + chunkSec * sr;
+      let best = target;
+      let bestE = Infinity;
+      for (let i = target - searchSec * sr; i < target + searchSec * sr; i += f) {
+        let s = 0;
+        for (let k = i; k < i + f; k++) s += x[k] * x[k];
+        if (s < bestE) { bestE = s; best = i + (f >> 1); }
+      }
+      cuts.push(best);
+      pos = best;
+    }
+    cuts.push(x.length);
+    return cuts;
+  }
+
   // Khi không nhận dạng được: chia đều thời gian theo độ dài chữ (kém chính xác hơn nhưng vẫn luyện được)
   function fallbackLines(text, start, end) {
     const sents = String(text).split(/\n+|(?<=[.!?…])\s+/).map((s) => s.trim()).filter(Boolean);
@@ -264,8 +285,8 @@
       const len = e - s;
       const el = $('#w-len');
       if (!el) return;
-      el.textContent = isNaN(len) || len <= 0 ? 'Thời gian chưa hợp lệ' : `Đoạn dài ${fmtS(len)}${len > 120 ? ' (nên chọn ngắn hơn 2 phút để luyện hiệu quả)' : ''}`;
-      el.classList.toggle('warn', isNaN(len) || len <= 0 || len > 300);
+      el.textContent = isNaN(len) || len <= 0 ? 'Thời gian chưa hợp lệ' : `Đoạn dài ${fmtS(len)}${len > 120 ? ` (tách lời mất khoảng ${Math.max(1, Math.round(len / 60 * 0.3))} phút trên máy tính, lâu hơn trên điện thoại)` : ''}`;
+      el.classList.toggle('warn', isNaN(len) || len <= 0 || len > 1200);
     }
     function tryRange(v) {
       const { s, e } = range();
@@ -283,7 +304,7 @@
       W.text = $('#w-text').value;
       W.keep = $('#w-keep').checked;
       if (isNaN(s) || isNaN(e) || e - s < 1) { UI.toast('Hãy chọn đoạn dài ít nhất 1 giây', 'warn'); return; }
-      if (e - s > 300) { UI.toast('Đoạn quá dài. Hãy chọn tối đa 5 phút', 'warn'); return; }
+      if (e - s > 1200) { UI.toast('Đoạn quá dài. Hãy chọn tối đa 20 phút', 'warn'); return; }
       W.start = s;
       W.end = e;
       body.innerHTML = `<h2 class="sh-wiz-title">🪄 Đang chuẩn bị clip</h2>
@@ -316,9 +337,24 @@
             const off = ASR.onState((st) => { if (st.status === 'loading') set(`Đang tải mô hình nhận dạng… ${Math.round(st.progress * 100)}%`, 0.05 + st.progress * 0.55); });
             try { await ASR.load(W.model); } finally { off(); }
             if (W.cancelled) return;
-            set('Đang nghe và tách lời…', 0.65);
-            const r = await ASR.transcribe(seg);
-            if (W.cancelled) return;
+            // Đoạn dài được cắt thành các phần ~60 giây (cắt ở chỗ lặng nhất) để báo tiến độ và không dồn bộ nhớ
+            const cuts = splitAtQuiet(seg, SR, 60, 6);
+            const parts = cuts.length - 1;
+            const all = [];
+            const tStart = performance.now();
+            for (let k = 0; k < parts; k++) {
+              let eta = '';
+              if (k > 0) {
+                const left = Math.round((performance.now() - tStart) / k * (parts - k) / 1000);
+                eta = ` · còn khoảng ${left >= 90 ? Math.round(left / 60) + ' phút' : left + ' giây'}`;
+              }
+              set(`Đang nghe và tách lời… ${parts > 1 ? `phần ${k + 1}/${parts}${eta}` : ''}`, 0.62 + 0.36 * k / parts);
+              const part = await ASR.transcribe(seg.subarray(cuts[k], cuts[k + 1]));
+              if (W.cancelled) return;
+              const off2 = cuts[k] / SR;
+              part.words.forEach((w) => all.push({ w: w.w, s: w.s + off2, e: w.e + off2 }));
+            }
+            const r = { words: all };
             if (!r.words.length) throw new Error('Không nghe thấy lời nói nào trong đoạn này.');
             let words = r.words;
             if (txt) words = SC.retime(txt, r.words);
