@@ -64,6 +64,7 @@
   const packLoads = {};            // số gói -> Promise đang tải
   let player = null;
   let reqId = 0;                   // mỗi lần đọc/dừng tăng lên để bỏ yêu cầu cũ còn đang chờ tải
+  let loadingFor = 0;              // mã yêu cầu đang chờ gói âm thanh tải xong (để biết là sắp có tiếng)
   const packKey = (t) => String(t).trim().toLowerCase();
 
   function loadIndex() {
@@ -149,11 +150,13 @@
       if (id === reqId) speakSynth(text, o);
     };
     const timer = setTimeout(fallback, WAIT_MS);
+    loadingFor = id;
     loadPackFile(Number(pi)).then((p) => {
       if (settled) return null;
       if (!p) { clearTimeout(timer); fallback(); return null; }
       return clipUrl(p, file).then((url) => {
         clearTimeout(timer);
+        if (loadingFor === id) loadingFor = 0;
         if (settled) return;
         settled = true;
         if (id !== reqId) return;
@@ -292,6 +295,12 @@
       return false;
     }
   }
+  // true nếu đang đọc hoặc sắp đọc (đang chờ gói âm thanh). Dùng để các thao tác khác không ngắt tiếng.
+  function busy() {
+    if (loadingFor && loadingFor === reqId) return true;
+    if (player && !player.paused && !player.ended && player.currentTime > 0) return true;
+    return !!(synth && (synth.speaking || synth.pending));
+  }
   const stop = () => {
     reqId++;
     if (player) player.pause();
@@ -329,7 +338,7 @@
   loadIndex();
 
   EV.audio = {
-    sfx, speak, clip, stop, warm,
+    sfx, speak, clip, stop, warm, busy,
     canSpeak: () => !!synth || !!index,
     canListen: () => !!SR,
     voices: () => voices.slice(),

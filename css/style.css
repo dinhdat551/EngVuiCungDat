@@ -1306,3 +1306,7 @@ a.practice-card { text-decoration: none; }
 .backup h3 { margin: 16px 0 6px; font-size: 16px; }
 .backup-box { width: 100%; box-sizing: border-box; padding: 10px; border: 2px solid var(--border); border-radius: 12px; background: var(--bg-soft); color: var(--text); font: 12px/1.4 ui-monospace, Consolas, monospace; resize: vertical; }
 .backup .btn-row { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Nút Tiếp tục đang chờ đọc xong đáp án */
+.ls-footer .primary-action.waiting { opacity: .85; animation: pulse-wait 1s ease-in-out infinite; }
+@keyframes pulse-wait { 50% { opacity: .6; } }

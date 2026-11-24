@@ -319,7 +319,8 @@
       s.add = (id) => {
         if (L.phase !== 'answer' || s.used.includes(id)) return;
         s.used.push(id);
-        if (settings().autoSpeak) A.speak(ex.tiles[id].text); else A.sfx('tap');
+        // Bài nghe ghép từ: đang đọc câu hỏi thì chỉ phát tiếng chạm, không ngắt câu đang đọc
+        if (settings().autoSpeak && !(ex.type === 'listenTiles' && A.busy())) A.speak(ex.tiles[id].text); else A.sfx('tap');
         draw(id);
       };
       s.removeLast = () => { if (s.used.length) { s.used.pop(); A.sfx('tap'); draw(); } };
@@ -631,6 +632,8 @@
 
   function next() {
     if (!L) return;
+    L.hold = null;
+    A.stop();            // sang câu khác thì dừng ngay phần đang đọc của câu trước
     if (!L.queue.length) { finish(); return; }
     L.ex = L.queue.shift();
     L.answer = null;
@@ -750,7 +753,24 @@
     setFooter('feedback', res);
     updateTop();
     const after = afterSayOf(ex);
-    if (after && settings().autoSpeak && (res.ok || ex.type !== 'quiz')) setTimeout(() => { if (L && L.ex === ex) A.speak(after); }, 350);
+    if (after && settings().autoSpeak && (res.ok || ex.type !== 'quiz')) {
+      // Đọc đáp án: nhấn Tiếp tục khi đang đọc thì chờ đọc xong rồi mới sang câu (nhấn lần hai để bỏ qua ngay)
+      const hold = { done: false, cb: null, timer: null };
+      L.hold = hold;
+      const fin = () => {
+        if (hold.done) return;
+        hold.done = true;
+        clearTimeout(hold.timer);
+        const cb = hold.cb;
+        hold.cb = null;
+        if (cb && L && L.hold === hold) cb();
+      };
+      hold.timer = setTimeout(fin, 7000);
+      setTimeout(() => {
+        if (!L || L.ex !== ex) return;
+        if (!A.speak(after, { onend: fin })) fin();
+      }, 350);
+    }
   }
 
   function markChoices(res) {
@@ -798,6 +818,15 @@
       return;
     }
     if (L.phase !== 'feedback') return;
+    const h = L.hold;
+    if (h && !h.done && !h.cb) {
+      // Đang đọc đáp án: chững lại một nhịp để nghe xong rồi mới chuyển câu
+      const btn = root.querySelector('.ls-footer .primary-action');
+      if (btn) { btn.dataset.label = btn.textContent; btn.textContent = 'Đang đọc đáp án…'; btn.classList.add('waiting'); }
+      h.cb = () => cont();
+      return;
+    }
+    if (h && !h.done) { h.done = true; clearTimeout(h.timer); h.cb = null; }   // nhấn lần hai: bỏ qua phần đang đọc
     if (L.heartsOn && S().state.hearts <= 0) { outOfHearts(); return; }
     next();
   }
