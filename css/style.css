@@ -1266,3 +1266,19 @@ a.practice-card { text-decoration: none; }
   .sh-btn.big { max-width: none; }
   .sh-line.active { font-size: 20px; }
 }
+
+
+/* Chú thích từ trong Shadowing */
+.sh-gtools { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 8px 2px 0; }
+.sh-line.active .sh-w { cursor: pointer; }
+.sh-line.active .sh-w.sel { border-bottom: 3px solid var(--blue); }
+.sh-gloss { margin-top: 10px; padding: 14px 16px; border-color: var(--blue-border); }
+.sh-g-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.sh-g-text { flex: 1; font-size: 20px; font-weight: 900; color: var(--text-strong); line-height: 1.4; }
+.sh-g-ipa { font-size: 18px; font-weight: 700; color: var(--blue-ink); margin-bottom: 4px; line-height: 1.8; }
+.sh-g-chip { display: inline-block; margin: 0 6px 2px 0; padding: 2px 8px; border-radius: 10px; background: var(--blue-soft); color: var(--text); font-size: 15px; font-weight: 700; }
+.sh-g-chip b { color: var(--text-strong); }
+.sh-g-defs { margin: 4px 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.sh-g-def i { color: var(--purple-dark); font-weight: 800; margin-right: 4px; }
+.sh-g-vi { margin: 8px 0; padding: 10px 12px; border-radius: 12px; background: var(--bg-soft); font-size: 17px; line-height: 1.5; color: var(--text-strong); }
+.sh-g-act { display: flex; flex-wrap: wrap; gap: 8px; }

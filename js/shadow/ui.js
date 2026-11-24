@@ -142,6 +142,12 @@
         <p class="muted small center">Tệp chỉ lưu trong máy bạn, không tải lên đâu cả. Hãy dùng nội dung bạn có quyền sử dụng.</p>
       </div>
       ${engineCard()}
+      <div class="card sh-tr">
+        <div class="sh-engine-head"><b>🌐 Dịch nghĩa cụm từ và câu</b></div>
+        <p class="muted small">Khi bạn bấm xem nghĩa hoặc “Dịch câu này”, đoạn chữ đó được gửi qua mạng tới dịch vụ MyMemory. Mỗi máy được dịch miễn phí khoảng 5.000 ký tự mỗi ngày. Nhập email của bạn (không bắt buộc) để tăng lên 50.000 ký tự mỗi ngày; email chỉ lưu trên máy này và gửi kèm yêu cầu dịch.</p>
+        <div class="sh-engine-row"><input id="sh-mm" class="sh-input" type="email" inputmode="email" placeholder="Email của bạn (không bắt buộc)" value="${esc(SH.dict ? SH.dict.email() : '')}" autocomplete="email">
+          <button class="btn btn-outline btn-sm" data-act-sh="mm-save">Lưu</button></div>
+      </div>
       <div class="section-head"><h2>Clip của bạn</h2><span class="muted">${mine.length} clip</span></div>
       <div class="sh-list">${mine.length ? mine.map((c) => clipCard(c, false)).join('') : '<div class="empty small"><p class="muted">Chưa có clip nào. Bấm “Thêm video / âm thanh của bạn” để bắt đầu.</p></div>'}</div>
       ${bi.length ? `<div class="section-head"><h2>Clip có sẵn</h2><span class="muted">${bi.length} clip</span></div>
@@ -172,6 +178,12 @@
     if (!act) return;
     if (act.dataset.actSh === 'add') openImport(() => renderLibrary(main));
     if (act.dataset.actSh === 'load') loadEngine(main);
+    if (act.dataset.actSh === 'mm-save') {
+      const v = main.querySelector('#sh-mm').value.trim();
+      if (v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { UI.toast('Email chưa đúng định dạng', 'warn'); return; }
+      SH.dict.setEmail(v);
+      UI.toast(v ? 'Đã lưu email dịch nghĩa' : 'Đã xóa email');
+    }
   }
 
   async function loadEngine(main) {

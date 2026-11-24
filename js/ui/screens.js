@@ -965,11 +965,13 @@
           Khoản ủng hộ (nếu có) là tự nguyện, không phải tiền mua nội dung.</p></section>
         <section><h3>Nội dung</h3>
           <p>Từ vựng, câu ví dụ, bài ngữ pháp, bài đọc và bài nghe được tự soạn hoặc tổng hợp cho mục đích học tập. Chương trình Lớp 1–12 chỉ tham khảo khung chủ đề
-          của chương trình tiếng Anh phổ thông; tên Unit dùng để bạn tìm đúng chủ đề đang học trên lớp, không sao chép nguyên văn sách giáo khoa.
-          Một phần từ vựng chủ đề, ngữ pháp CEFR và đề TOEIC Part 5–7 lấy từ dự án WebHocTA do chính tác giả EngVui tự làm; phần giải nghĩa tiếng Anh được viết lại bằng lời riêng.</p></section>
+          của chương trình tiếng Anh phổ thông; tên Unit dùng để bạn tìm đúng chủ đề đang học trên lớp, không sao chép nguyên văn sách giáo khoa.</p></section>
         <section><h3>Thương hiệu và đề thi</h3>
           <p>EngVui không liên kết với, không được tài trợ hay xác nhận bởi Nhà xuất bản Giáo dục Việt Nam, Bộ Giáo dục và Đào tạo, ETS (TOEIC), British Council, IDP hay Cambridge (IELTS).
           TOEIC và IELTS là nhãn hiệu của các chủ sở hữu tương ứng. Các câu hỏi trong mục Luyện thi mô phỏng dạng bài để luyện kỹ năng, <b>không phải đề thi thật hay đề thi chính thức</b>.</p></section>
+        <section><h3>Phiên âm và dịch nghĩa (mục Shadowing)</h3>
+          <p>Phiên âm IPA lấy từ <b>Từ điển phát âm CMU</b> (Carnegie Mellon University, giấy phép BSD, kèm sẵn trong app) và tra thêm qua dictionaryapi.dev khi có mạng.
+          Bản dịch cụm từ và câu do dịch vụ <b>MyMemory</b> cung cấp qua mạng, chỉ mang tính tham khảo.</p></section>
         <section><h3>Giọng đọc</h3>
           <p>Mọi âm thanh do giọng tổng hợp (máy) tạo sẵn, không phải bản thu âm của đề thi thật. Bài nghe nhiều người nói chỉ mô phỏng cách ra đề.</p></section>
         <section><h3>Sử dụng lại</h3>
@@ -1058,9 +1060,9 @@
   /* =========================================================
      CHÀO MỪNG (lần đầu mở ứng dụng)
      ========================================================= */
-  const ob = { step: 'welcome', name: '', avatar: '🐲', level: null, grade: null, goal: 20 };
+  const ob = { step: 'welcome', name: '', avatar: '🐲', grade: null, goal: 20 };
   function renderOnboarding(app) {
-    const steps = ['welcome', 'name', 'level', 'grade', 'goal'];
+    const steps = ['welcome', 'name', 'grade', 'goal'];
     const idx = steps.indexOf(ob.step);
     if (ob.step === 'welcome') {
       app.innerHTML = `<div class="ob ob-welcome">
@@ -1077,7 +1079,6 @@
     }
     const q = {
       name: 'Chào bạn! Mình là Rồng Con 🐲. Bạn tên là gì nhỉ?',
-      level: 'Bạn đang học cấp mấy?',
       grade: 'Bạn đang học lớp mấy?',
       goal: 'Mỗi ngày bạn muốn học bao nhiêu?',
     }[ob.step];
@@ -1086,19 +1087,14 @@
     if (ob.step === 'name') {
       body = `<input class="text-input big" id="ob-name" maxlength="24" placeholder="Tên của bạn (không bắt buộc)" value="${esc(ob.name)}">
         <div class="avatar-grid">${AVATARS.map((a) => `<button class="av-pick ${a === ob.avatar ? 'sel' : ''}" data-ob-av="${a}">${a}</button>`).join('')}</div>`;
-    } else if (ob.step === 'level') {
-      canNext = !!ob.level;
-      body = `<div class="ob-options">${C.LEVELS.map((lv) => `<button class="ob-opt ${ob.level === lv.id ? 'sel' : ''}" data-ob-level="${lv.id}">
-        <span class="ob-opt-ico">${lv.emoji}</span><span><b>${lv.name} · ${lv.full}</b><small>Lớp ${lv.grades[0]}–${lv.grades[lv.grades.length - 1]}</small></span></button>`).join('')}</div>`;
     } else if (ob.step === 'grade') {
-      const lv = C.level(ob.level);
       const avail = new Set(C.availableGrades());
       canNext = !!ob.grade;
-      body = `<div class="grade-grid">${lv.grades.map((g) => {
+      body = `<div class="grade-grid">${C.LEVELS.map((lv) => lv.grades.map((g) => {
         const G = C.getGrade(g);
         return `<button class="grade-card ${ob.grade === g ? 'cur' : ''}" data-ob-grade="${g}" ${avail.has(g) ? '' : 'disabled'} style="--c:${lv.color};--d:${lv.dark}">
           <span class="grade-num">${g}</span><span class="grade-name">Lớp ${g}</span><span class="grade-meta">${G ? G.units.length + ' Unit' : 'Đang cập nhật'}</span></button>`;
-      }).join('')}</div>`;
+      }).join('')).join('')}</div>`;
     } else if (ob.step === 'goal') {
       body = `<div class="ob-options">${[[10, 'Thong thả', '5 phút/ngày'], [20, 'Vừa phải', '10 phút/ngày'], [30, 'Nghiêm túc', '15 phút/ngày'], [50, 'Siêu cấp', '20 phút/ngày']].map(([v, l, t]) => `
         <button class="ob-opt ${ob.goal === v ? 'sel' : ''}" data-ob-goal="${v}"><span><b>${l}</b><small>${t}</small></span><span class="ob-goal-xp">${v} KN</span></button>`).join('')}</div>`;
@@ -1121,7 +1117,7 @@
   function onboardingClick(e, app) {
     const t = e.target;
     const nav = t.closest('[data-ob]');
-    const steps = ['welcome', 'name', 'level', 'grade', 'goal'];
+    const steps = ['welcome', 'name', 'grade', 'goal'];
     if (nav) {
       const i = steps.indexOf(ob.step);
       if (nav.dataset.ob === 'back') ob.step = steps[Math.max(0, i - 1)];
@@ -1133,8 +1129,6 @@
     }
     const av = t.closest('[data-ob-av]');
     if (av) { ob.avatar = av.dataset.obAv; renderOnboarding(app); return; }
-    const lv = t.closest('[data-ob-level]');
-    if (lv) { ob.level = +lv.dataset.obLevel; ob.grade = null; A.sfx('tap'); renderOnboarding(app); return; }
     const gr = t.closest('[data-ob-grade]');
     if (gr) { ob.grade = +gr.dataset.obGrade; A.sfx('tap'); renderOnboarding(app); return; }
     const gl = t.closest('[data-ob-goal]');
@@ -1243,7 +1237,7 @@
     },
     renderOnboarding, onboardingClick, onAction, showHearts, closeNodePops, currentRoute,
     focusCurrent: () => { scrollToCurrent = true; },
-    resetOnboarding: () => { Object.assign(ob, { step: 'welcome', name: '', avatar: '🐲', level: null, grade: null, goal: 20 }); },
+    resetOnboarding: () => { Object.assign(ob, { step: 'welcome', name: '', avatar: '🐲', grade: null, goal: 20 }); },
   };
 
   function renderChrome(route) { EV.app.renderChrome(route); }

@@ -42,6 +42,14 @@
     main.innerHTML = '<p class="muted">Đang mở clip…</p>';
     let clip = null;
     try { clip = await DB.get(id); } catch (e) { /* bỏ qua */ }
+    if (!clip && SH.loadBuiltins) {
+      // mở thẳng bằng đường dẫn: lấy từ danh sách clip có sẵn
+      const b = (await SH.loadBuiltins()).find((c) => c.id === id);
+      if (b) {
+        clip = Object.assign({ createdAt: Date.now(), best: {}, builtin: true }, b);
+        try { await DB.save(clip); } catch (e) { /* vẫn mở được từ bản gốc */ }
+      }
+    }
     const back = '<p><a class="link" href="#/shadow">← Danh sách clip</a></p>';
     if (!clip) { main.innerHTML = `${back}<div class="notice">Không tìm thấy clip này. Có thể nó đã bị xóa.</div>`; return; }
     const urls = [];
@@ -55,7 +63,7 @@
     }
     const r = route();
     if (r[0] !== 'shadow' || decodeURIComponent(r[1] || '') !== id) { urls.forEach((u) => URL.revokeObjectURL(u)); return; }
-    P = { clip, lines: clip.lines, idx: 0, rate: 1, mode: 'seq', token: 0, raf: 0, meterRaf: 0, rec: null, busy: '', last: {}, urls, url, media: null, replay: null, dead: false };
+    P = { clip, lines: clip.lines, idx: 0, rate: 1, mode: 'seq', token: 0, gtoken: 0, sel: null, raf: 0, meterRaf: 0, rec: null, busy: '', last: {}, urls, url, media: null, replay: null, dead: false };
     draw(main);
     setIdx(0, true);
     if (ASR.wasReady()) ASR.load().catch(() => { /* chấm cơ bản nếu không nạp được */ });
@@ -101,6 +109,8 @@
       <div class="sh-ptop"><a class="link" href="#/shadow">← Danh sách clip</a><h1 class="sh-ptitle">${esc(c.title)}</h1></div>
       <div class="sh-stage ${audio ? 'audio' : ''}"><video id="sh-v" playsinline preload="auto"></video>${audio ? '<div class="sh-cover">🎧</div>' : ''}</div>
       <div class="sh-lyrics" id="sh-lyrics">${P.lines.map(lineHTML).join('')}</div>
+      <div class="sh-gtools"><span class="muted small">Chạm vào một từ để xem phiên âm và nghĩa.</span><button class="btn btn-outline btn-sm" data-p="g-line">🌐 Dịch câu này</button></div>
+      <div id="sh-gloss"></div>
       <div class="sh-status" id="sh-status" aria-live="polite"></div>
       <div class="sh-meterbar" id="sh-meterbar" hidden><i></i></div>
       <div class="sh-ctl">
@@ -161,6 +171,10 @@
 
   function setIdx(i, instant) {
     P.idx = clamp(i, 0, P.lines.length - 1);
+    P.sel = null;
+    P.gtoken++;
+    const gl = $('#sh-gloss');
+    if (gl) gl.innerHTML = '';
     const lyr = $('#sh-lyrics');
     lyr.querySelectorAll('.sh-line').forEach((el, k) => {
       el.classList.toggle('active', k === P.idx);
@@ -400,6 +414,11 @@
      ========================================================= */
   async function onClick(e) {
     if (!P) return;
+    const wd = e.target.closest('.sh-w');
+    if (wd && wd.closest('.sh-line.active')) {
+      if (!P.busy) { const k = Array.from(wd.closest('.sh-text').querySelectorAll('.sh-w')).indexOf(wd); openGloss(P.idx, k, k); }
+      return;
+    }
     const ln = e.target.closest('.sh-line');
     if (ln && !P.busy) { setIdx(+ln.dataset.i); return; }
     const rate = e.target.closest('[data-rate]');
@@ -425,6 +444,86 @@
     else if (k === 'next') { if (!P.busy) setIdx(P.idx + 1); }
     else if (k === 'replay') replay();
     else if (k === 'loadasr') loadAsr(b);
+    else if (k === 'g-line') { if (!P.busy) openGloss(P.idx, 0, P.lines[P.idx].words.length - 1); }
+    else if (P.sel) {
+      const { i, a, bb } = { i: P.sel.i, a: P.sel.a, bb: P.sel.b };
+      if (k === 'g-close') closeGloss();
+      else if (k === 'g-prev' && a > 0) openGloss(i, a - 1, bb);
+      else if (k === 'g-next' && bb < P.lines[i].words.length - 1) openGloss(i, a, bb + 1);
+      else if (k === 'g-one') openGloss(i, a, a);
+      else if (k === 'g-say') EV.audio.speak(selText());
+    }
+  }
+
+  /* =========================================================
+     Chú thích từ: phiên âm, nghĩa, dịch cụm từ và câu
+     ========================================================= */
+  const D = () => SH.dict;
+  const trim = (s) => s.replace(/^[^\p{L}\p{N}']+|[^\p{L}\p{N}']+$/gu, '');
+  function selText() {
+    const { i, a, b } = P.sel;
+    return trim(P.lines[i].words.slice(a, b + 1).map((w) => w.w).join(' '));
+  }
+  function closeGloss() {
+    P.sel = null;
+    P.gtoken++;
+    $('#sh-gloss').innerHTML = '';
+    document.querySelectorAll('#main .sh-w.sel').forEach((n) => n.classList.remove('sel'));
+  }
+  const trErr = (e) => (e.message === 'quota'
+    ? 'Đã hết hạn mức dịch miễn phí hôm nay. Vào trang Shadowing và nhập email để tăng hạn mức lên gấp 10 lần, hoặc thử lại vào ngày mai.'
+    : 'Cần kết nối Internet để dịch (mình dịch qua dịch vụ MyMemory).');
+
+  function openGloss(i, a, b) {
+    P.sel = { i, a, b };
+    const token = ++P.gtoken;
+    const line = P.lines[i];
+    $('#sh-lyrics').children[i].querySelectorAll('.sh-w').forEach((n, k) => n.classList.toggle('sel', k >= a && k <= b));
+    const n = b - a + 1;
+    const text = selText();
+    const whole = a === 0 && b === line.words.length - 1;
+    const box = $('#sh-gloss');
+    box.innerHTML = `<div class="card sh-gloss">
+      <div class="sh-g-head"><b class="sh-g-text">${esc(text)}</b>
+        <button class="sh-mini" data-p="g-say" title="Nghe đọc">🔊</button><button class="sh-mini" data-p="g-close" title="Đóng" aria-label="Đóng">✕</button></div>
+      <div class="sh-g-ipa muted">…</div>
+      <div class="sh-g-defs"></div>
+      <div class="sh-g-vi"><span class="muted">Đang dịch…</span></div>
+      <div class="sh-g-act">
+        <button class="btn btn-outline btn-sm" data-p="g-prev" ${a === 0 ? 'disabled' : ''}>◀ Thêm từ trước</button>
+        <button class="btn btn-outline btn-sm" data-p="g-next" ${b >= line.words.length - 1 ? 'disabled' : ''}>Thêm từ sau ▶</button>
+        ${n > 1 && !whole ? '<button class="btn btn-outline btn-sm" data-p="g-one">Chỉ từ đầu</button>' : ''}
+      </div></div>`;
+    const q = (s) => (P && P.gtoken === token ? box.querySelector(s) : null);
+    if (n === 1) glossWord(q, text); else glossPhrase(q, i, a, b, text, whole);
+  }
+
+  async function glossWord(q, text) {
+    const w = D().clean(text);
+    D().viMeaning(w).then((r) => {
+      const el = q('.sh-g-vi');
+      if (el) el.innerHTML = `<b>${esc(r.vi)}</b>${r.base ? ` <small class="muted">(dạng của “${esc(r.base)}”)</small>` : ''}${r.src === 'mt' ? ' <small class="muted">· dịch máy, chỉ tham khảo</small>' : ''}`;
+    }).catch((e) => { const el = q('.sh-g-vi'); if (el) el.innerHTML = `<span class="muted">${esc(trErr(e))}</span>`; });
+    const quick = await D().ipaOf(w, false);
+    let el = q('.sh-g-ipa');
+    if (el) el.innerHTML = quick ? `/${esc(quick)}/ <small class="muted">· từ điển có sẵn</small>` : '<span class="muted">Đang tra phiên âm…</span>';
+    const r = await D().lookup(w);
+    el = q('.sh-g-ipa');
+    if (!el || !r) { if (el) el.innerHTML = quick ? el.innerHTML : '<span class="muted">Chưa có phiên âm cho từ này.</span>'; return; }
+    el.innerHTML = r.ipa ? `/${esc(r.ipa)}/ <small class="muted">· ${r.src === 'online' ? 'tra mạng' : 'từ điển có sẵn'}</small>` : '<span class="muted">Chưa có phiên âm cho từ này.</span>';
+    const defs = q('.sh-g-defs');
+    if (defs) defs.innerHTML = r.defs.map((d) => `<div class="sh-g-def"><i>${esc(d.pos)}</i> ${esc(d.def)}</div>`).join('');
+  }
+
+  async function glossPhrase(q, i, a, b, text, whole) {
+    D().translate(text).then((vi) => {
+      const el = q('.sh-g-vi');
+      if (el) el.innerHTML = `<b>${esc(vi)}</b> <small class="muted">· ${whole ? 'dịch cả câu' : 'dịch cụm từ'} bằng máy, chỉ tham khảo</small>`;
+    }).catch((e) => { const el = q('.sh-g-vi'); if (el) el.innerHTML = `<span class="muted">${esc(trErr(e))}</span>`; });
+    const ws = P.lines[i].words.slice(a, b + 1).map((w) => trim(w.w)).filter(Boolean);
+    const ipas = await Promise.all(ws.map((w) => D().ipaOf(w, ws.length <= 3)));
+    const el = q('.sh-g-ipa');
+    if (el) el.innerHTML = ws.map((w, k) => `<span class="sh-g-chip"><b>${esc(w)}</b> ${ipas[k] ? '/' + esc(ipas[k]) + '/' : '<small class="muted">—</small>'}</span>`).join(' ');
   }
 
   function replay() {
