@@ -1287,3 +1287,22 @@ a.practice-card { text-decoration: none; }
 .node.adv { outline: 3px dashed var(--gold); outline-offset: 5px; }
 .node.adv.s-locked { outline-color: var(--node-locked-dark); }
 .node.adv.s-done { background: var(--gold); box-shadow: 0 7px 0 var(--gold-dark); }
+
+/* Giải thích từ vựng CNTT trong Sổ tay chủ đề */
+.gexp { border: 2px solid var(--border); border-radius: 14px; margin: 8px 0; background: var(--bg-soft); }
+.gexp summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 11px 14px; cursor: pointer; list-style: none; }
+.gexp summary::-webkit-details-marker { display: none; }
+.gexp summary b { font-size: 17px; font-weight: 900; color: var(--text-strong); }
+.gexp summary i { font-style: normal; font-size: 14px; color: var(--muted); }
+.gexp summary::after { content: '＋'; margin-left: auto; color: var(--blue-ink); font-weight: 900; }
+.gexp[open] summary::after { content: '－'; }
+.gexp[open] { border-color: var(--blue-border); }
+.gexp p { margin: 0; padding: 0 14px 8px; font-size: 16px; line-height: 1.55; color: var(--text); }
+.gexp-say { display: inline-flex; align-items: center; gap: 6px; margin: 0 14px 12px; padding: 6px 12px; border: 0; border-radius: 12px; background: var(--blue-soft); color: var(--blue-ink); font-weight: 800; cursor: pointer; }
+.gexp-say .ico { width: 18px; height: 18px; }
+
+/* Sao lưu bằng văn bản */
+.backup h2 { margin: 0 0 6px; }
+.backup h3 { margin: 16px 0 6px; font-size: 16px; }
+.backup-box { width: 100%; box-sizing: border-box; padding: 10px; border: 2px solid var(--border); border-radius: 12px; background: var(--bg-soft); color: var(--text); font: 12px/1.4 ui-monospace, Consolas, monospace; resize: vertical; }
+.backup .btn-row { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }

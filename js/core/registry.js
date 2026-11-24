@@ -31,6 +31,12 @@ EV.registerPron = function (data) {
   EV.pronData = data;
 };
 
+/* Giải thích từ vựng (js/data/explain/exp*.js): EV.explainData[mã chủ đề][từ viết thường] = lời giải thích ngắn. */
+EV.explainData = EV.explainData || {};
+EV.registerExplain = function (map) {
+  if (!map || typeof map !== 'object') return;
+  Object.keys(map).forEach((id) => { EV.explainData[id] = Object.assign(EV.explainData[id] || {}, map[id]); });
+};
 /* Từ vựng bổ sung cho các chủ đề đã đăng ký (js/data/it_words.js): thêm từ và câu mẫu vào chủ đề theo mã, bỏ qua mục đã có. */
 EV.extendTopics = function (map) {
   const B = EV.examData;

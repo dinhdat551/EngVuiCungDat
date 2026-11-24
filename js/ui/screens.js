@@ -589,6 +589,10 @@
         ${t.words.length ? `<section><h3>Từ vựng <span class="count">${t.words.length}</span></h3>
           <div class="gwords">${t.words.map((w) => `<button class="gword" data-say-text="${esc(w.en)}">
             <span class="gw-emoji">${Art.emoji(w.emoji) || '🔤'}</span><span class="gw-txt"><b>${esc(w.en)}</b><i>${esc(w.vi)}</i></span>${Art.icon('speaker', 'gw-spk')}</button>`).join('')}</div></section>` : ''}
+        ${t.words.some((w) => w.exp) ? `<section class="gexp-sec"><h3>Giải thích từ vựng <span class="count">${t.words.filter((w) => w.exp).length}</span></h3>
+          <p class="muted small">Bấm vào từng từ để xem nó là gì, làm gì và có vai trò gì.</p>
+          ${t.words.filter((w) => w.exp).map((w) => `<details class="gexp"><summary><b>${esc(w.en)}</b><i>${esc(w.vi)}</i></summary>
+            <p>${esc(w.exp)}</p><button class="gexp-say" data-say-text="${esc(w.en)}">${Art.icon('speaker')}<span>Nghe từ</span></button></details>`).join('')}</section>` : ''}
         ${t.formula.length ? `<section><h3>${isGm ? 'Công thức' : 'Ghi nhớ'}</h3><div class="formula">${t.formula.map((f) => `<div class="f-row"><b>${esc(f.k)}</b><span>${esc(f.v)}</span></div>`).join('')}</div></section>` : ''}
         ${prHTML}
         ${t.grammar.length ? `<section><h3>${isGm ? 'Cách dùng' : isPr ? (t.kind === 'shadow' ? 'Cách luyện' : 'Cách phát âm') : 'Mẹo và cụm từ'}</h3>${t.grammar.map((g) => `<div class="gcard"><h4>${esc(g.title)}</h4><p>${esc(g.text)}</p>${g.examples.map(say).join('')}</div>`).join('')}</section>` : ''}
@@ -907,9 +911,10 @@
       </section>
       <section class="card settings">
         <h2>Dữ liệu</h2>
-        <p class="muted small">Tiến độ được lưu ngay trên trình duyệt của máy này. Hãy sao lưu ra file để chuyển sang máy khác.</p>
+        <p class="muted small">Tiến độ được lưu ngay trên máy này. Cài đè bản mới thì dữ liệu vẫn còn, nhưng hãy sao lưu trước khi gỡ app hay đổi máy. Dữ liệu Shadowing (video, âm thanh đã nhập) không nằm trong bản sao lưu.</p>
         <div class="btn-row">
           <button class="btn btn-outline btn-sm" data-act="export">⬇️ Sao lưu tiến độ</button>
+          <button class="btn btn-outline btn-sm" data-act="backup-text">📋 Sao lưu bằng văn bản</button>
           <label class="btn btn-outline btn-sm file-btn">⬆️ Khôi phục từ file<input type="file" id="import-file" accept="application/json,.json"></label>
           <button class="btn btn-danger btn-sm" data-act="reset">Xóa toàn bộ dữ liệu</button>
         </div>
@@ -1006,7 +1011,45 @@
     };
     r.readAsText(f);
   }
+  // Trong ứng dụng Android (WebView) việc tải tệp thường không chạy, nên dùng cách sao chép và dán văn bản
+  const isNativeApp = () => !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+  function openBackupText() {
+    UI.modal({
+      className: 'backup-modal',
+      html: `<div class="backup">
+        <h2>Sao lưu và khôi phục</h2>
+        <p class="muted small">Sao chép đoạn văn bản dưới đây rồi dán vào Ghi chú, Zalo hay email để cất giữ. Khi cần, dán lại vào ô khôi phục.</p>
+        <textarea id="backup-out" class="backup-box" readonly rows="5">${esc(S().exportData())}</textarea>
+        <div class="btn-row"><button class="btn btn-primary btn-sm" data-act="backup-copy">📋 Sao chép</button>
+          ${navigator.share ? '<button class="btn btn-outline btn-sm" data-act="backup-share">📤 Chia sẻ</button>' : ''}</div>
+        <h3>Khôi phục từ văn bản đã lưu</h3>
+        <textarea id="backup-in" class="backup-box" rows="4" placeholder="Dán đoạn sao lưu vào đây"></textarea>
+        <div class="btn-row"><button class="btn btn-outline btn-sm" data-act="backup-restore">⬆️ Khôi phục</button>
+          <button class="btn btn-ghost btn-sm" data-close>Đóng</button></div></div>`,
+    });
+  }
+  function backupCopy() {
+    const t = document.getElementById('backup-out');
+    if (!t) return;
+    const done = () => UI.toast('✅ Đã sao chép bản sao lưu');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).then(done, () => { t.select(); document.execCommand('copy'); done(); });
+    else { t.select(); try { document.execCommand('copy'); done(); } catch (e) { UI.toast('Hãy giữ ngón tay lên ô để chọn và sao chép', 'warn'); } }
+  }
+  function backupRestore() {
+    const t = document.getElementById('backup-in');
+    const txt = t ? t.value.trim() : '';
+    if (!txt) { UI.toast('Hãy dán đoạn sao lưu trước', 'warn'); return; }
+    try {
+      S().importData(txt);
+      UI.toast('✅ Đã khôi phục tiến độ!');
+      location.hash = '#/learn';
+      EV.app.boot();
+    } catch (err) {
+      UI.toast('Văn bản không hợp lệ: ' + esc(err.message), 'warn');
+    }
+  }
   function exportFile() {
+    if (isNativeApp()) { openBackupText(); return; }
     const blob = new Blob([S().exportData()], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -1214,6 +1257,10 @@
       case 'set-color': s.profile.color = el.dataset.v; S().save(); EV.app.render(); break;
       case 'test-voice': A.speak('Hello! Welcome to EngVui. Let\'s learn English together.'); break;
       case 'export': exportFile(); break;
+      case 'backup-text': openBackupText(); break;
+      case 'backup-copy': backupCopy(); break;
+      case 'backup-share': navigator.share({ title: 'EngVui sao lưu', text: S().exportData() }).catch(() => {}); break;
+      case 'backup-restore': backupRestore(); break;
       case 'donate': openDonate(); break;
       case 'toggle-theme': {
         const dark = document.documentElement.dataset.theme === 'dark';

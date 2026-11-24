@@ -140,6 +140,7 @@
       color: group ? group.color : '#1CB0F6', dark: group ? group.dark : '#1899D6',
       words: (raw.words || []).map((w) => ({
         en: w[0], vi: w[1], emoji: w[2] || '', key: `${id}:w:${String(w[0]).toLowerCase()}`, unitId: id, kind: 'word',
+        exp: ((EV.explainData || {})[raw.id] || {})[String(w[0]).toLowerCase()] || '',
       })),
       formula: (raw.formula || []).map((f) => ({ k: f[0], v: f[1] })),
       transforms: (raw.transform || []).map((x, k) => ({
