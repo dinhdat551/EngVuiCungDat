@@ -14,6 +14,7 @@
     { id: 'grammar', label: 'Ngữ pháp', icon: '📐' },
     { id: 'exam', label: 'Luyện thi', icon: '📝' },
     { id: 'pron', label: 'Phát âm', icon: '🗣️' },
+    { id: 'shadow', label: 'Shadowing', icon: '🎙️', noBottom: true },
     { id: 'practice', label: 'Luyện tập', icon: '🏋️' },
     { id: 'leaderboard', label: 'Xếp hạng', icon: '🏆' },
     { id: 'quests', label: 'Nhiệm vụ', icon: '🎯' },
@@ -631,6 +632,7 @@
         ${pcard('mistakes', '🩹', `Ôn lỗi sai (${s.mistakes.length})`, 'Làm lại những câu bạn từng trả lời sai', !s.mistakes.length)}
         ${pcard('listen', '🎧', 'Luyện nghe', C.VOCAB_ONLY ? 'Nghe từ và chọn đúng từ, đúng nghĩa' : 'Nghe và chọn, nghe và sắp xếp câu', !studied.length)}
         ${A.canListen() && !C.VOCAB_ONLY ? pcard('speak', '🎤', 'Luyện nói', 'Đọc to câu tiếng Anh, máy chấm phát âm', !studied.length) : ''}
+        <a class="practice-card" href="#/shadow"><span class="pc-ico">🎙️</span><span class="pc-body"><b>Shadowing</b><span>Nhại theo video như hát karaoke, máy chấm điểm</span></span></a>
       </div>
       <div class="section-head"><h2>Sổ từ vựng</h2><span class="muted">${learnedCount} từ đã học</span></div>
       ${learnedCount ? `<div class="search-box">${Art.icon('search')}<input id="word-search" type="search" placeholder="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt…" autocomplete="off"></div>

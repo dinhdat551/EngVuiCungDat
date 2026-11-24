@@ -10,7 +10,7 @@
   let app = null;
   let mode = null;
   const TITLES = {
-    learn: 'Học', grammar: 'Ngữ pháp', exam: 'Luyện thi', pron: 'Phát âm', practice: 'Luyện tập', leaderboard: 'Bảng xếp hạng', quests: 'Nhiệm vụ',
+    learn: 'Học', grammar: 'Ngữ pháp', exam: 'Luyện thi', pron: 'Phát âm', shadow: 'Shadowing', practice: 'Luyện tập', leaderboard: 'Bảng xếp hạng', quests: 'Nhiệm vụ',
     shop: 'Cửa hàng', profile: 'Hồ sơ', settings: 'Cài đặt',
   };
 
@@ -60,6 +60,7 @@
     UI.closePopover();
     const main = document.getElementById('main');
     if (!main) return;
+    if (route !== 'shadow' && EV.shadow && EV.shadow.leave) EV.shadow.leave();   // dừng mic/video khi rời Shadowing
     main.dataset.route = route;
     fn(main);
     renderChrome(route);
