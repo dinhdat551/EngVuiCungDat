@@ -31,6 +31,20 @@ EV.registerPron = function (data) {
   EV.pronData = data;
 };
 
+/* Từ vựng bổ sung cho các chủ đề đã đăng ký (js/data/it_words.js): thêm từ và câu mẫu vào chủ đề theo mã, bỏ qua mục đã có. */
+EV.extendTopics = function (map) {
+  const B = EV.examData;
+  if (!B || !map) return;
+  B.topics.forEach((t) => {
+    const x = map[t.id];
+    if (!x) return;
+    const hw = new Set((t.words || []).map((w) => String(w[0]).toLowerCase()));
+    (x.words || []).forEach((w) => { const k = String(w[0]).toLowerCase(); if (!hw.has(k)) { (t.words = t.words || []).push(w); hw.add(k); } });
+    const hs = new Set((t.sentences || []).map((s) => String(s[0]).toLowerCase()));
+    (x.sentences || []).forEach((s) => { const k = String(s[0]).toLowerCase(); if (!hs.has(k)) { (t.sentences = t.sentences || []).push(s); hs.add(k); } });
+  });
+};
+
 /* Dữ liệu bổ sung cho Ngữ pháp và Luyện thi (js/data/*_plus.js, aviation.js...): thêm nhóm và chủ đề vào bộ đã đăng ký,
    bỏ qua nhóm/chủ đề trùng mã để nạp hai lần cũng không bị nhân đôi. */
 (function () {

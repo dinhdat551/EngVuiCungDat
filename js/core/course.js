@@ -191,14 +191,18 @@
     } else {
       // Luyện thi: Từ vựng 1, Từ vựng 2 (chia đôi danh sách từ) rồi Luyện đề.
       // Đề thi thử (mock): không có từ vựng, chỉ một bài làm trọn đề theo thứ tự
-      const W = t.words, half = Math.ceil(W.length / 2);
+      const W = t.words;
+      // Chia từ vựng thành các bài khoảng 7 từ (chủ đề 8–14 từ vẫn là hai bài như trước)
+      const parts = W.length > 1 ? Math.min(8, Math.max(2, Math.ceil(W.length / 7))) : 1;
+      const size = Math.ceil(W.length / parts);
       t.nodes = [];
       if (t.mock) {
         t.node = node('mock', 'Đề thi thử', 'trophy', 'exam', 40);
         t.nodes.push(t.node);
       } else {
-        if (W.length) t.nodes.push(node('v1', W.length > 1 ? 'Từ vựng 1' : 'Từ vựng', 'star', 'vocab', 10, { words: W.slice(0, half) }));
-        if (W.length > 1) t.nodes.push(node('v2', 'Từ vựng 2', 'star', 'vocab', 10, { words: W.slice(half) }));
+        for (let p = 0; p < parts && W.length; p++) {
+          t.nodes.push(node('v' + (p + 1), parts > 1 ? 'Từ vựng ' + (p + 1) : 'Từ vựng', 'star', 'vocab', 10, { words: W.slice(p * size, (p + 1) * size) }));
+        }
         if (t.reading) t.nodes.push(node('r', 'Đọc hiểu', 'book', 'reading', 15));
         if (t.listening.length) t.nodes.push(node('l', 'Nghe hiểu', 'headphones', 'listenc', 15));
         t.node = node('p', 'Luyện đề', 'trophy', 'exam', 15);
