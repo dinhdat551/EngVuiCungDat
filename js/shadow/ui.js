@@ -203,6 +203,8 @@
     let body = null;
     let closeModal = null;
     const $ = (s) => body.querySelector(s);
+    // Độ dài tối đa của một clip: video 30 phút, chỉ có tiếng 60 phút (giải mã và nhận dạng đều chạy trên máy)
+    const maxLen = () => (W.kind === 'audio' ? 3600 : 1800);
 
     UI.modal({
       full: true,
@@ -237,7 +239,7 @@
             <select id="w-model" class="sh-select">${Object.keys(ASR.MODELS).map((k) => `<option value="${k}" ${k === W.model ? 'selected' : ''}>${esc(ASR.MODELS[k].label)}</option>`).join('')}</select>
             <small class="muted">${ASR.wasReady() ? 'Mô hình đã có trên máy, chạy offline.' : 'Lần đầu cần mạng để tải mô hình, các lần sau dùng offline.'}</small>
           </div>
-          <label class="sh-check"><input type="checkbox" id="w-keep" ${W.keep ? 'checked' : ''}> Giữ cả hình ảnh video <small class="muted">(chiếm dung lượng bằng tệp gốc; bỏ chọn để chỉ lưu âm thanh của đoạn đã cắt, rất nhẹ)</small></label>
+          ${W.kind === 'video' ? `<label class="sh-check"><input type="checkbox" id="w-keep" ${W.keep ? 'checked' : ''}> Giữ cả hình ảnh video <small class="muted">(chiếm dung lượng bằng tệp gốc; bỏ chọn để chỉ lưu âm thanh của đoạn đã cắt, rất nhẹ)</small></label>` : ''}
           <button class="btn btn-primary btn-block" data-w="go">🪄 Tự động tách lời</button>
         </div>`;
       const v = $('#w-v');
@@ -286,7 +288,7 @@
       const el = $('#w-len');
       if (!el) return;
       el.textContent = isNaN(len) || len <= 0 ? 'Thời gian chưa hợp lệ' : `Đoạn dài ${fmtS(len)}${len > 120 ? ` (tách lời mất khoảng ${Math.max(1, Math.round(len / 60 * 0.3))} phút trên máy tính, lâu hơn trên điện thoại)` : ''}`;
-      el.classList.toggle('warn', isNaN(len) || len <= 0 || len > 1200);
+      el.classList.toggle('warn', isNaN(len) || len <= 0 || len > maxLen());
     }
     function tryRange(v) {
       const { s, e } = range();
@@ -302,9 +304,10 @@
       const { s, e } = range();
       W.title = ($('#w-title').value || '').trim() || 'Clip của tôi';
       W.text = $('#w-text').value;
-      W.keep = $('#w-keep').checked;
+      W.keep = $('#w-keep') ? $('#w-keep').checked : false;
       if (isNaN(s) || isNaN(e) || e - s < 1) { UI.toast('Hãy chọn đoạn dài ít nhất 1 giây', 'warn'); return; }
-      if (e - s > 1200) { UI.toast('Đoạn quá dài. Hãy chọn tối đa 20 phút', 'warn'); return; }
+      if (e - s > maxLen()) { UI.toast(`Đoạn quá dài. Hãy chọn tối đa ${maxLen() / 60} phút${W.kind === 'video' ? ' (file chỉ có tiếng thì được tới 60 phút)' : ''}`, 'warn'); return; }
+      if (!W.full && W.file.size > 900 * 1048576) { UI.toast('Tệp quá lớn (' + mb(W.file.size) + '). Hãy xuất video ở độ phân giải thấp hơn, hoặc tách riêng file âm thanh mp3 rồi thêm lại.', 'warn'); return; }
       W.start = s;
       W.end = e;
       body.innerHTML = `<h2 class="sh-wiz-title">🪄 Đang chuẩn bị clip</h2>
@@ -424,7 +427,8 @@
       btn.disabled = true;
       btn.textContent = 'Đang lưu…';
       try {
-        const keepVideo = W.keep && W.kind === 'video';
+        // Giữ nguyên tệp gốc khi: video và người dùng chọn giữ hình; hoặc âm thanh dài (WAV 16 kHz tốn ~2 MB mỗi phút)
+        const keepVideo = W.kind === 'video' ? W.keep : (W.end - W.start > 900 && W.file.size < 150 * 1048576);
         const shift = keepVideo ? 0 : W.start;
         const lines = W.lines.filter((l) => l.text.trim()).map((l) => {
           const a = Math.max(0, Math.floor(l.s * SR)), z = Math.min(W.full.length, Math.ceil(l.e * SR));
@@ -436,7 +440,7 @@
         let blob = W.file;
         if (!keepVideo) blob = encodeWav(W.full.subarray(Math.floor(W.start * SR), Math.min(W.full.length, Math.floor(W.end * SR))), SR);
         const meta = {
-          id: uid(), title: W.title, kind: keepVideo ? 'video' : 'audio', createdAt: Date.now(),
+          id: uid(), title: W.title, kind: keepVideo ? W.kind : 'audio', createdAt: Date.now(),
           start: keepVideo ? round3(W.start) : 0, end: keepVideo ? round3(W.end) : round3(W.end - W.start), lines, best: {},
         };
         await DB.save(meta, blob);
