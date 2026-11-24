@@ -382,6 +382,42 @@
     return out.filter(Boolean).slice(0, 14);
   }
 
+  // Từ vựng nâng cao của Unit: từ khó hơn kèm vài câu và câu hỏi riêng. Từ nhiễu ưu tiên từ nâng cao cùng lớp
+  function advLesson(ctx, node) {
+    const u = ctx.unit;
+    const G = ctx.grade;
+    const unit = Object.assign(Object.create(u), { words: u.advWords, sentences: u.advSentences, quiz: u.advQuiz });
+    const a = Object.assign({}, ctx, {
+      unit,
+      pool: G.units.flatMap((x) => x.advWords || []).concat(ctx.pool),
+      sentences: G.units.flatMap((x) => x.advSentences || []).concat(ctx.sentences),
+    });
+    const words = node.words;
+    const rot = rotation(ctx.g);
+    let r = 0;
+    const next = (w) => {
+      for (let t = 0; t < rot.length; t++) {
+        const ex = practiceFor(a, w, rot[r++ % rot.length]);
+        if (ex) return ex;
+      }
+      return null;
+    };
+    const out = [];
+    words.forEach((w, i) => {
+      out.push(X.select(a, w, 'en2vi', true));
+      if (i === 1 || i === 5) out.push(next(U.pick([words[i - 1], w])));
+    });
+    out.push(X.match(a, U.sample(words, 5)));
+    const S = U.shuffle(unit.sentences);
+    const withWord = S.filter((s) => words.some((w) => containsWord(s, w)));
+    const f = withWord.length ? X.fill(a, U.pick(withWord), words) : null;
+    if (f) out.push(f);
+    if (S[0]) out.push(X.translate(a, S[0], 'en2vi') || X.wordBank(a, S[0], true));
+    if (S[1]) out.push(X.wordBank(a, S[1]));
+    U.shuffle(unit.quiz).slice(0, 2).forEach((q) => out.push(X.quiz(a, q)));
+    return out.filter(Boolean).slice(0, 17);
+  }
+
   function phrasesLesson(ctx) {
     const S = ctx.unit.sentences.slice(0, 6);
     const out = [];
@@ -627,6 +663,7 @@
     switch (node.key) {
       case 'v1':
       case 'v2': return vocabLesson(ctx, node.words);
+      case 'va': return advLesson(ctx, node);
       case 'ph': return phrasesLesson(ctx);
       case 'gr': return grammarLesson(ctx);
       case 'ls': return listeningLesson(ctx);

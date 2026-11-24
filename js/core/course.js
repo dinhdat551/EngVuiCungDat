@@ -26,6 +26,7 @@
     ph: { title: 'Mẫu câu', icon: 'chat', kind: 'phrases', xp: 10 },
     gr: { title: 'Ngữ pháp', icon: 'book', kind: 'grammar', xp: 10 },
     ls: { title: 'Luyện nghe', icon: 'headphones', kind: 'listening', xp: 10 },
+    va: { title: 'Từ vựng nâng cao', icon: 'star', kind: 'vocab', xp: 15 },
     test: { title: 'Kiểm tra Unit', icon: 'trophy', kind: 'test', xp: 20 },
     rv: { title: 'Review', icon: 'review', kind: 'review', xp: 20 },
   };
@@ -67,6 +68,15 @@
         en: w[0], vi: w[1], emoji: w[2] || '', key: `${id}:w:${String(w[0]).toLowerCase()}`, unitId: id, kind: 'word',
       })),
     }, content(id, raw));
+    // Từ vựng nâng cao: tách riêng khỏi words để bài kiểm tra, ôn tập, nghe không hỏi từ chưa học
+    const A = (EV.advData && EV.advData[id]) || null;
+    unit.advWords = A ? (A.words || []).map((w) => ({
+      en: w[0], vi: w[1], emoji: w[2] || '', key: `${id}:w:${String(w[0]).toLowerCase()}`, unitId: id, kind: 'word', adv: true,
+    })) : [];
+    unit.advSentences = A ? (A.sentences || []).map((s, k) => ({ en: s[0], vi: s[1], key: `${id}:as:${k}`, unitId: id, kind: 'sentence' })) : [];
+    unit.advQuiz = A ? (A.quiz || []).map((q, k) => ({
+      q: q[0], answer: q[1], wrong: q[2] || [], explain: q[3] || '', key: `${id}:aq:${k}`, unitId: id, kind: 'quiz',
+    })) : [];
     const W = unit.words;
     const nodes = [];
     if (W.length >= 8) {
@@ -86,9 +96,11 @@
       nodes.push(makeNode(unit, 'ls'));
       nodes.push(makeNode(unit, 'test'));
     }
+    // Bài tùy chọn ở cuối Unit: không chặn bài sau, không tính vào số bài của Unit
+    if (unit.advWords.length) nodes.push(makeNode(unit, 'va', { words: unit.advWords, adv: true }));
     nodes.forEach((n, idx) => { n.index = idx; });
     unit.nodes = nodes;
-    unit.lessonCount = nodes.filter((n) => n.kind !== 'chest').length;
+    unit.lessonCount = nodes.filter((n) => n.kind !== 'chest' && !n.adv).length;
     return unit;
   }
 
@@ -236,9 +248,11 @@
     const [unitId, kind, rest] = String(key).split(':');
     const unit = getUnit(unitId);
     if (!unit) return null;
-    if (kind === 'w') return unit.words.find((w) => w.key === key) || null;
+    if (kind === 'w') return unit.words.find((w) => w.key === key) || (unit.advWords || []).find((w) => w.key === key) || null;
     if (kind === 's') return unit.sentences[+rest] || null;
     if (kind === 'q') return unit.quiz[+rest] || null;
+    if (kind === 'as') return (unit.advSentences || [])[+rest] || null;
+    if (kind === 'aq') return (unit.advQuiz || [])[+rest] || null;
     if (kind === 't') return (unit.transforms || [])[+rest] || null;
     if (kind === 'r') return unit.reading ? unit.reading.questions[+rest] || null : null;
     if (kind === 'g') return (unit.gaps || [])[+rest] || null;
@@ -317,7 +331,7 @@
     const d = new Map();
     const addGrade = (gg) => {
       const G = getGrade(gg);
-      if (G) G.units.forEach((u) => u.words.forEach((w) => {
+      if (G) G.units.forEach((u) => u.words.concat(u.advWords || []).forEach((w) => {
         const k = w.en.toLowerCase();
         if (!d.has(k)) d.set(k, w.vi);
       }));
@@ -357,7 +371,7 @@
   function hintTokens(sentence, unit) {
     const g = unit ? unit.grade : 6;
     const dicts = [];
-    if (unit) dicts.push(new Map(unit.words.map((w) => [w.en.toLowerCase(), w.vi])));
+    if (unit) dicts.push(new Map(unit.words.concat(unit.advWords || []).map((w) => [w.en.toLowerCase(), w.vi])));
     dicts.push(dictFor(g));
     const ch = U.chunks(sentence);
     const out = [];
@@ -393,7 +407,7 @@
     const G = getGrade(g);
     if (G) {
       G.units.forEach((u) => {
-        u.sentences.forEach((s) => {
+        u.sentences.concat(u.advSentences || []).forEach((s) => {
           const ch = U.chunks(s.en);
           ch.forEach((c, idx) => {
             const prevEnds = idx === 0 || /[.?!]/.test(ch[idx - 1].post);

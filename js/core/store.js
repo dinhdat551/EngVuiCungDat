@@ -207,7 +207,7 @@
     const G = EV.course.getGrade(grade);
     if (!G) return;
     G.units.slice(0, unitIndex).forEach((u) => u.nodes.concat(u.review || []).forEach((n) => {
-      if (n.kind !== 'chest' && !isDone(n.id)) st.progress[n.id] = { n: 1, best: 0, jumped: true };
+      if (n.kind !== 'chest' && !n.adv && !isDone(n.id)) st.progress[n.id] = { n: 1, best: 0, jumped: true };
     }));
     save();
   }

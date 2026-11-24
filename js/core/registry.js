@@ -5,6 +5,13 @@ EV.registerGrade = function (data) {
   if (!data || !data.grade || !Array.isArray(data.units)) return;
   EV.gradesData[data.grade] = data;
 };
+/* Từ vựng nâng cao (js/data/adv/*.js): mỗi Unit có thêm một bài tùy chọn ở cuối Unit.
+   Khóa là mã Unit (g8u3), giá trị { words, sentences, quiz }. Nạp nhiều file thì gộp lại. */
+EV.advData = EV.advData || {};
+EV.registerAdv = function (data) {
+  if (!data || typeof data !== 'object') return;
+  Object.keys(data).forEach((k) => { EV.advData[k] = data[k]; });
+};
 /* Mục Ngữ pháp (js/data/grammar.js) đăng ký danh sách chủ đề. */
 EV.grammarData = EV.grammarData || null;
 EV.registerGrammar = function (data) {

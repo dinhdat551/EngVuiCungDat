@@ -1282,3 +1282,8 @@ a.practice-card { text-decoration: none; }
 .sh-g-def i { color: var(--purple-dark); font-weight: 800; margin-right: 4px; }
 .sh-g-vi { margin: 8px 0; padding: 10px 12px; border-radius: 12px; background: var(--bg-soft); font-size: 17px; line-height: 1.5; color: var(--text-strong); }
 .sh-g-act { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Bài Từ vựng nâng cao ở cuối Unit (tùy chọn, không chặn bài sau) */
+.node.adv { outline: 3px dashed var(--gold); outline-offset: 5px; }
+.node.adv.s-locked { outline-color: var(--node-locked-dark); }
+.node.adv.s-done { background: var(--gold); box-shadow: 0 7px 0 var(--gold-dark); }

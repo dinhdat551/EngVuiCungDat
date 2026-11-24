@@ -137,7 +137,7 @@
   function prereqDone(G, node) {
     for (const n of G.nodes) {
       if (n === node) return true;
-      if (n.kind !== 'chest' && n.kind !== 'review' && !S().isDone(n.id)) return false;
+      if (n.kind !== 'chest' && n.kind !== 'review' && !n.adv && !S().isDone(n.id)) return false;
     }
     return true;
   }
@@ -145,7 +145,7 @@
   const reviewSkipped = (G, i) => G.nodes[i].kind === 'review'
     && G.nodes.slice(i + 1).some((y) => y.kind !== 'chest' && S().isDone(y.id));
   function currentNodeId(G) {
-    const i = G.nodes.findIndex((x, k) => x.kind !== 'chest' && !S().isDone(x.id) && !reviewSkipped(G, k));
+    const i = G.nodes.findIndex((x, k) => x.kind !== 'chest' && !x.adv && !S().isDone(x.id) && !reviewSkipped(G, k));
     return i >= 0 ? G.nodes[i].id : null;
   }
   function nodeState(G, node, cur) {
@@ -155,6 +155,7 @@
       return unlockAll || prereqDone(G, node) ? 'ready' : 'locked';
     }
     if (S().isDone(node.id)) return 'done';
+    if (node.adv) return unlockAll || prereqDone(G, node) ? 'open' : 'locked';   // bài tùy chọn: mở khi đã tới cuối Unit
     if (node.id === cur) return 'current';
     if (node.kind === 'review' && prereqDone(G, node)) return 'open';
     return unlockAll ? 'open' : 'locked';
@@ -162,7 +163,7 @@
   function gradeProgress(g) {
     const G = C.getGrade(g);
     if (!G) return 0;
-    const lessons = G.nodes.filter((n) => n.kind !== 'chest');
+    const lessons = G.nodes.filter((n) => n.kind !== 'chest' && !n.adv);
     return lessons.length ? lessons.filter((n) => S().isDone(n.id)).length / lessons.length : 0;
   }
 
@@ -176,7 +177,7 @@
       const x = Math.round(Math.sin((Math.PI * j) / Math.max(1, n - 1)) * 78 * dir);
       return nodeHTML(node, nodeState(G, node, cur), x);
     }).join('');
-    const done = u.nodes.filter((x) => x.kind !== 'chest' && S().isDone(x.id)).length;
+    const done = u.nodes.filter((x) => x.kind !== 'chest' && !x.adv && S().isDone(x.id)).length;
     return `<section class="unit ${locked ? 'is-locked' : ''}" id="${u.id}" style="--uc:${u.color};--ud:${u.dark}">
       <div class="unit-head">
         <div class="unit-head-main">
@@ -209,7 +210,7 @@
     return `<div class="node-row" style="--x:${x}px">
       <div class="node-wrap ${state === 'current' ? 'current' : ''}">
         ${state === 'current' ? '<div class="start-tag">Bắt đầu</div>' : ''}
-        <button class="node k-${node.kind} s-${state}" data-act="node" data-node="${node.id}" aria-label="${esc(node.title)}">${inner}</button>
+        <button class="node k-${node.kind}${node.adv ? ' adv' : ''} s-${state}" data-act="node" data-node="${node.id}" aria-label="${esc(node.title)}">${inner}</button>
       </div>
     </div>`;
   }
@@ -267,10 +268,11 @@
     const unit = C.getUnit(node.unitId);
     const state = nodeState(G, node, currentNodeId(G));
     if (node.kind === 'chest') { openChest(btn, node, state); return; }
-    const lessons = unit.nodes.filter((n) => n.kind !== 'chest');
+    const lessons = unit.nodes.filter((n) => n.kind !== 'chest' && !n.adv);
     const idx = lessons.indexOf(node) + 1;
     let desc = `Bài ${idx}/${lessons.length}`;
-    if (node.kind === 'review') desc = `Ôn tập ${unitRange(node.units)}: từ vựng, mẫu câu và ngữ pháp`;
+    if (node.adv) desc = `Tùy chọn · ${node.words.length} từ khó hơn: ${node.words.slice(0, 4).map((w) => esc(w.en)).join(', ')}…`;
+    else if (node.kind === 'review') desc = `Ôn tập ${unitRange(node.units)}: từ vựng, mẫu câu và ngữ pháp`;
     else if (node.kind === 'vocab') desc += ` · ${node.words.length} từ: ${node.words.slice(0, 4).map((w) => esc(w.en)).join(', ')}${node.words.length > 4 ? '…' : ''}`;
     else if (node.kind === 'phrases') desc += ' · Hiểu và sắp xếp các mẫu câu của bài';
     else if (node.kind === 'grammar') desc += ` · ${esc(unit.grammar[0] ? unit.grammar[0].title : 'Ngữ pháp trọng tâm')}`;
@@ -374,6 +376,12 @@
           <div class="gwords">${u.words.map((w) => `<button class="gword" data-say-text="${esc(w.en)}">
             <span class="gw-emoji">${Art.emoji(w.emoji) || '🔤'}</span><span class="gw-txt"><b>${esc(w.en)}</b><i>${esc(w.vi)}</i></span>${Art.icon('speaker', 'gw-spk')}</button>`).join('')}</div>
         </section>
+        ${u.advWords && u.advWords.length ? `<section><h3>Từ vựng nâng cao <span class="count">${u.advWords.length}</span></h3>
+          <div class="gwords">${u.advWords.map((w) => `<button class="gword" data-say-text="${esc(w.en)}">
+            <span class="gw-emoji">${Art.emoji(w.emoji) || '🔤'}</span><span class="gw-txt"><b>${esc(w.en)}</b><i>${esc(w.vi)}</i></span>${Art.icon('speaker', 'gw-spk')}</button>`).join('')}</div>
+          ${u.advSentences.length ? `<div class="gsents">${u.advSentences.map((s) => `<button class="gsent" data-say-text="${esc(s.en)}">
+            ${Art.icon('speaker')}<span><b>${esc(s.en)}</b><i>${esc(s.vi)}</i></span></button>`).join('')}</div>` : ''}
+        </section>` : ''}
         ${u.sentences.length && !C.VOCAB_ONLY ? `<section><h3>Mẫu câu</h3><div class="gsents">${u.sentences.map((s) => `<button class="gsent" data-say-text="${esc(s.en)}">
           ${Art.icon('speaker')}<span><b>${esc(s.en)}</b><i>${esc(s.vi)}</i></span></button>`).join('')}</div></section>` : ''}
         ${u.grammar.length && !C.VOCAB_ONLY ? `<section><h3>Ngữ pháp</h3>${u.grammar.map((g) => `<div class="gcard"><h4>${esc(g.title)}</h4><p>${esc(g.text)}</p>
