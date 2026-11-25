@@ -241,8 +241,8 @@
     return voices.find((x) => /en[-_]US/i.test(x.lang)) || voices[0] || null;
   }
   // Chữ viết tắt mà giọng đọc hay đọc thành từ (IT → "it", US → "us") → tách chữ cái để đánh vần.
-  const SPELL = /\b(IT|US|PE|CV|DIY|WTO)\b/g;
-  const spellOut = (s) => String(s).replace(SPELL, (m) => m.split('').join(' '));
+  const SPELL = /\b(IT|US|PE|CV|DIY|WTO|AI|VR|AR|PC|OS|UI|UX|API|HTML|CSS|URL|HTTP|HTTPS|SQL|VPN|LAN|WAN|SSD|HDD|USB|CPU|GPU|DNS|DHCP|VLAN|SSL|TLS|CDN|SEO|IDE|XML|XSS|CSRF|MQTT|HDMI|NFT|DDoS|SDK|GPS|GPIO|ADC|PWM|UART|SPI|IDS|IPS|SBOM|WPA|SSID|QoS|FYI|IoT|CORS|OOP|RFID|LED|DOM|GDPR|NPC|DeFi)\b/g;
+  const spellOut = (s) => String(s).replace(SPELL, (m) => m.toUpperCase().split('').join(' '));
   let speakTimer = null;
   function speak(text, opts) {
     if (!text) return false;
